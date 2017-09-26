@@ -15,7 +15,7 @@ module.exports = function styleLoader(env) {
             localIdentName: '[hash:base64:8]',
             minimize: env === 'production',
         }
-    }
+    };
 
     const postcss = {
         loader: 'postcss-loader'
@@ -23,7 +23,7 @@ module.exports = function styleLoader(env) {
 
     const sass = {
         loader: 'sass-loader'
-    }
+    };
 
     if (env !== 'development') {
         return {
@@ -36,4 +36,4 @@ module.exports = function styleLoader(env) {
         test: /\.scss$/,
         use: [commonJs2File, css2CommonJs, postcss, sass]
     };
-}
+};

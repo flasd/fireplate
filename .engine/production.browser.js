@@ -1,5 +1,3 @@
-const path = require('path');
-
 const plugins = require('./plugins');
 const loaders = require('./loaders');
 const utils = require('./utils');

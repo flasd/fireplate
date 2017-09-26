@@ -3,7 +3,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const NpmInstallPlugin = require('npm-install-webpack-plugin');
-const DashboardPlugin = require('webpack-dashboard/plugin');
 
 // Remember to add the code commented to your entry file
 // import * as offlineRuntime from 'offline-plugin/runtime';
@@ -18,7 +17,7 @@ const htmlConfig = {
 
 const vendorChunk = {
     name: 'vendor.[hash].js',
-    minChunks: m => m.context && m.context.indexOf('node_modules') !== -1
+    minChunks: mod => mod.context && mod.context.indexOf('node_modules') !== -1
 };
 
 const manifestChunk = {
@@ -32,8 +31,7 @@ module.exports = function plugins(env) {
             new OfflinePlugin({ ServiceWorker: false, AppCache: false }),
             new HtmlWebpackPlugin(htmlConfig),
             new webpack.HotModuleReplacementPlugin(),
-            new NpmInstallPlugin(),
-            new DashboardPlugin({ port: 8080 })
+            new NpmInstallPlugin()
         ];
     } else if (env === 'production') {
         return [

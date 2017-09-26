@@ -11,5 +11,5 @@ module.exports = function fileLoader(env) {
                 emitFile: emitFile,
             }
         }]
-    })
-}
+    });
+};

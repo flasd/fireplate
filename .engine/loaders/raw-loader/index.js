@@ -1,6 +1,6 @@
-module.exports = function rawLoader(env) {
+module.exports = function rawLoader() {
     return ({
         test: /\.(txt|data|raw)$/,
         use: 'raw-loader'
     });
-}
+};

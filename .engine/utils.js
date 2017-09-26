@@ -1,4 +1,7 @@
+const path = require('path');
+
 const cwd = process.cwd();
+
 const env = process.env.NODE_ENV;
 const target = process.env.TARGET;
 
