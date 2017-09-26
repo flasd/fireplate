@@ -1,0 +1,40 @@
+{
+    "presets": [
+        ["env", {
+            "targets": {
+                "browsers": "> 3%",
+                "node": true
+            }
+        }],
+        "react"
+    ],
+    "plugins": [
+        "babel-plugin-root-import",
+        "transform-object-rest-spread"
+    ],
+    "env": {
+        "development": {
+            "plugins": [
+                "meaningful-logs"
+            ]
+        },
+        "production": {
+            "presets": [
+                "minify",
+                "react-optimize"
+            ],
+            "plugins": [
+                "babel-plugin-loop-optimizer",
+                "external-helpers",
+                "fast-async",
+                "lodash",
+                "ramda"
+            ]
+        },
+        "test": {
+            "plugins": [
+                "rewire"
+            ]
+        }
+    }
+}

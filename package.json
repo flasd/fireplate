@@ -1,0 +1,60 @@
+{
+  "name": "webpack-boilerplate",
+  "version": "0.0.0-alpha-0.1",
+  "description": "webpack boilerplate for speed up dev process",
+  "main": "./.engine/initializer.js",
+  "scripts": {
+    "start": "cross-env TARGET=development webpack-dev-server --hot",
+    "test": "mocha ./.engine/**/*/test.js --compilers=babel-core/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flasd/webpack-boilerplate.git"
+  },
+  "keywords": [
+    "webpack",
+    "boilerplate"
+  ],
+  "author": "Marcel Coelho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flasd/webpack-boilerplate/issues"
+  },
+  "homepage": "https://github.com/flasd/webpack-boilerplate#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-meaningful-logs": "^1.0.2",
+    "babel-plugin-ramda": "^1.4.3",
+    "babel-plugin-rewire": "^1.1.0",
+    "babel-plugin-root-import": "^5.1.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-minify": "^0.2.0",
+    "babel-preset-react-optimize": "^1.0.1",
+    "cross-env": "^5.0.5",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "fast-async": "^6.3.0",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.30.1",
+    "npm-install-webpack-plugin": "^4.0.5",
+    "offline-plugin": "^4.8.4",
+    "postcss-cssnext": "^3.0.2",
+    "postcss-loader": "^2.0.6",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.6.0",
+    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-config-utils": "^2.3.0",
+    "webpack-dashboard": "^1.0.0-5",
+    "webpack-dev-server": "^2.8.2"
+  },
+  "dependencies": {
+    "babel-plugin-loop-optimizer": "^1.4.1"
+  }
+}
