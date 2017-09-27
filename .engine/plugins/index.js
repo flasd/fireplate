@@ -13,6 +13,7 @@ const htmlConfig = {
     title: 'My React App',
     /* this gets replaced during ssr */
     minify: { collapseWhitespace: true },
+    template: './.engine/plugins/template.html'
 };
 
 const vendorChunk = {

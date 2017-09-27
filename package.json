@@ -5,7 +5,7 @@
   "main": "./.engine/initializer.js",
   "scripts": {
     "start": "cross-env TARGET=development webpack-dev-server --hot",
-    "test": "mocha ./.engine/**/*/test.js --compilers=babel-core/register"
+    "test": "mocha ./.engine/**/*/test.js"
   },
   "repository": {
     "type": "git",
