@@ -1,7 +1,7 @@
 const ExtractText = require('extract-text-webpack-plugin');
 
 module.exports = function styleLoader(env) {
-    const commonJs2File = {
+    const commomJsToDOM = {
         loader: 'style-loader',
         options: {
             emitFile: env !== 'node',
@@ -34,6 +34,6 @@ module.exports = function styleLoader(env) {
 
     return {
         test: /\.scss$/,
-        use: [commonJs2File, css2CommonJs, postcss, sass]
+        use: [commomJsToDOM, css2CommonJs, postcss, sass]
     };
 };

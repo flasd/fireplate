@@ -1,11 +1,5 @@
 {
     "presets": [
-        ["env", {
-            "targets": {
-                "browsers": "> 3%",
-                "node": true
-            }
-        }],
         "react"
     ],
     "plugins": [
@@ -14,12 +8,25 @@
     ],
     "env": {
         "development": {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": "Chrome 61"
+                    }
+                }],
+            ],
             "plugins": [
                 "meaningful-logs"
             ]
         },
         "production": {
             "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": "> 3%",
+                        "node": true
+                    }
+                }],
                 "minify",
                 "react-optimize"
             ],
@@ -32,6 +39,7 @@
             ]
         },
         "test": {
+            "presets": ["env"],
             "plugins": [
                 "rewire"
             ]

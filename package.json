@@ -4,8 +4,8 @@
   "description": "webpack boilerplate for speed up dev process",
   "main": "./.engine/initializer.js",
   "scripts": {
-    "start": "cross-env TARGET=development webpack-dev-server --hot",
-    "test": "mocha ./.engine/**/*/test.js"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
+    "test:engine": "cross-env NODE_ENV=test nyc -x .engine/**/*.test.js mocha ./.engine/**/*.test.js --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -35,14 +35,19 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-minify": "^0.2.0",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-react-optimize": "^1.0.1",
+    "chai": "^4.1.2",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.0",
     "fast-async": "^6.3.0",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.30.1",
+    "mocha": "^3.5.3",
+    "node-sass": "^4.5.3",
     "npm-install-webpack-plugin": "^4.0.5",
+    "nyc": "^11.2.1",
     "offline-plugin": "^4.8.4",
     "postcss-cssnext": "^3.0.2",
     "postcss-loader": "^2.0.6",

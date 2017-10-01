@@ -4,7 +4,7 @@ const prodBrowserConfig = require('./.engine/production.browser');
 const prodServerConfig = require('./.engine/production.server');
 
 if (utils.env === 'production') {
-    module.exports = [prodBrowserConfig, prodServerConfig];
+    module.exports = [prodBrowserConfig(), prodServerConfig()];
 } else {
-    module.exports = devConfig;
+    module.exports = devConfig();
 }

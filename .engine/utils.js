@@ -19,5 +19,5 @@ function sortEnv() {
 
 module.exports = {
     resolve: resolve,
-    env: sortEnv(),
+    env: sortEnv,
 };

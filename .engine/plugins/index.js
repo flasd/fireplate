@@ -22,14 +22,13 @@ const vendorChunk = {
 };
 
 const manifestChunk = {
-    name: 'manifest',
+    name: 'manifest.[hash].js',
     minChunks: Infinity
 };
 
 module.exports = function plugins(env) {
     if (env === 'development') {
         return [
-            new OfflinePlugin({ ServiceWorker: false, AppCache: false }),
             new HtmlWebpackPlugin(htmlConfig),
             new webpack.HotModuleReplacementPlugin(),
             new NpmInstallPlugin()
