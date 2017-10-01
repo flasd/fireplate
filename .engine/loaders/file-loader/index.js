@@ -4,6 +4,7 @@ module.exports = function fileLoader(env) {
 
     return ({
         test: /\.(png|jpg|jpeg|gif)$/,
+        exclude: /node_modules/,
         use: [{
             loader: 'file-loader',
             options: {

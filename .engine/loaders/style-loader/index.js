@@ -34,6 +34,7 @@ module.exports = function styleLoader(env) {
 
     return {
         test: /\.scss$/,
+        exclude: /node_modules/,
         use: [commomJsToDOM, css2CommonJs, postcss, sass]
     };
 };
