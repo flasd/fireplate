@@ -1,6 +1,6 @@
 {
   "name": "webpack-boilerplate",
-  "version": "0.0.0-alpha-0.1",
+  "version": "0.0.0-alpha0.2",
   "description": "webpack boilerplate for speed up dev process",
   "main": "./.engine/initializer.js",
   "scripts": {
