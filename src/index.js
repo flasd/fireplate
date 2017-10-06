@@ -1,6 +1,9 @@
 import './services/analytics';
 import './services/firebase';
 
+import * as offlineRuntime from 'offline-plugin/runtime';
+offlineRuntime.install();
+
 import React from 'react';
 import { render } from 'react-dom';
 import { Router } from 'react-router';

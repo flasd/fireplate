@@ -4,6 +4,7 @@ module.exports = function babelLoader() {
         exclude: /node_modules/,
         use: [{
             loader: 'babel-loader'
-        }]
+        }],
+        enforce: 'pre'
     });
 };

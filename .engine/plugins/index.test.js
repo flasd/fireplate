@@ -11,8 +11,10 @@ function Replacement(argument) {
 const webpack = {
     HotModuleReplacementPlugin: Replacement,
     optimize: {
-        CommonsChunkPlugin: Replacement
+        CommonsChunkPlugin: Replacement,
+        UglifyJsPlugin: Replacement
     },
+    DefinePlugin: Replacement,
 };
 
 describe('Plugin Spec', () => {
@@ -49,7 +51,7 @@ describe('Plugin Spec', () => {
 
         const prodOutput = plugins('production');
 
-        expect(prodOutput).to.be.an('array').with.lengthOf(6);
+        expect(prodOutput).to.be.an('array').with.lengthOf(8);
 
         expect(prodOutput[0]).to.be.ok;
         expect(prodOutput[1]).to.be.ok;
@@ -61,12 +63,12 @@ describe('Plugin Spec', () => {
         expect(prodOutput[2]).to.have.property('template');
 
         expect(prodOutput[3]).to.be.an('object');
-        expect(prodOutput[3]).to.have.property('name', 'vendor.[hash].js');
+        expect(prodOutput[3]).to.have.property('name', 'vendor');
         expect(prodOutput[3]).to.have.property('minChunks').which.is.a('function');
         expect(prodOutput[3].minChunks({ context: 'node_modules' })).to.be.true;
 
         expect(prodOutput[4]).to.be.an('object');
-        expect(prodOutput[4]).to.have.property('name', 'manifest.[hash].js');
+        expect(prodOutput[4]).to.have.property('name', 'manifest');
         expect(prodOutput[4]).to.have.property('minChunks', Infinity);
 
         expect(prodOutput[5]).to.be.ok;
@@ -75,7 +77,7 @@ describe('Plugin Spec', () => {
     it('should return the correct plugins in node env', () => { 
         const servOutput = plugins('node');
 
-        expect(servOutput).to.be.an('array').with.lengthOf(1);
+        expect(servOutput).to.be.an('array').with.lengthOf(2);
 
         expect(servOutput[0]).to.be.an('object');
         expect(servOutput[0]).to.have.property('title');

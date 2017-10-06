@@ -1,10 +1,15 @@
 {
     "presets": [
-        "react"
+        "env", "react"
     ],
     "plugins": [
         "babel-plugin-root-import",
-        "transform-object-rest-spread"
+        "transform-object-rest-spread", 
+        ["import-inspector", {
+            "serverSideRequirePath": true,
+            "webpackRequireWeakId": true,
+        }],
+        "syntax-dynamic-import",
     ],
     "env": {
         "development": {
@@ -24,6 +29,23 @@
                 ["env", {
                     "targets": {
                         "browsers": "> 3%",
+                    }
+                }],
+                "minify",
+                "react-optimize"
+            ],
+            "plugins": [
+                "babel-plugin-loop-optimizer",
+                "external-helpers",
+                "fast-async",
+                "lodash",
+                "ramda"
+            ]
+        },
+        "production:server": {
+            "presets": [
+                ["env", {
+                    "targets": {
                         "node": true
                     }
                 }],

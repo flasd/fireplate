@@ -1,10 +1,8 @@
-const utils = require('./.engine/utils');
 const devConfig = require('./.engine/development');
-const prodBrowserConfig = require('./.engine/production.browser');
-const prodServerConfig = require('./.engine/production.server');
+const prodConfig = require('./.engine/production');
 
-if (utils.env === 'production') {
-    module.exports = [prodBrowserConfig(), prodServerConfig()];
+if (process.env.NODE_ENV === 'production') {
+    module.exports = prodConfig();
 } else {
     module.exports = devConfig();
 }

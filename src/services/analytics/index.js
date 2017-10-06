@@ -17,6 +17,6 @@ import { listen } from '../navigation';
 ga('create', 'UA-77709069-2', 'auto');
 ga('send', 'pageview');
 
-/* eslint-enable */
-
 listen(location => ga('send', 'pageview', location.pathname));
+
+/* eslint-enable */

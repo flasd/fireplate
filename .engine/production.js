@@ -8,29 +8,24 @@ function resolve(filepath) {
     return path.resolve(cwd, filepath);
 }
 
-module.exports = function devConf() {
+module.exports = function prodConf() {
     return ({
         context: resolve('.'),
         devtool: 'source-map',
         entry: './src/index',
+        stats: 'minimal',
         target: 'web',
 
         output: {
-            path: resolve('dist'),
-            filename: 'bundle.js',
+            path: resolve('dist/assets'),
+            publicPath: './assets/',
+            filename: '[name]-[hash].js',
         },
 
         module: {
-            rules: loaders('development')
+            rules: loaders('production')
         },
 
-        plugins: plugins('development'),
-
-        devServer: {
-            contentBase: resolve('dist'),
-            historyApiFallback: true,
-            hot: true,
-            port: 8080
-        }
+        plugins: plugins('production'),
     });
 };

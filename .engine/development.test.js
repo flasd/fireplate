@@ -7,13 +7,12 @@ import devConfig from './development';
 describe('Webpack Dev Config Object', () => {
     before(() => {
         const replacement = env => ([env]);
-        const utils = {
-            env: () => ('development'),
-            resolve: str => (str)
-        };
+
         devConfig.__Rewire__('plugins', replacement);
         devConfig.__Rewire__('loaders', replacement);
-        devConfig.__Rewire__('utils', utils);
+        devConfig.__Rewire__('path', {
+            resolve: (x, y) => (y),
+        });
     });
 
     it('should export a valid object', () => {
@@ -47,12 +46,11 @@ describe('Webpack Dev Config Object', () => {
         expect(configObject.devServer).to.have.property('historyApiFallback', true);
         expect(configObject.devServer).to.have.property('hot', true);
         expect(configObject.devServer).to.have.property('port', 8080);
-
     });
 
     after(() => {
         devConfig.__ResetDependency__('plugins');
         devConfig.__ResetDependency__('loaders');
-        devConfig.__ResetDependency__('utils');
+        devConfig.__ResetDependency__('path');
     });
 });

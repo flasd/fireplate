@@ -2,18 +2,17 @@
 
 import { expect } from 'chai';
 
-import prodConfig from './production.server';
+import prodConfig from './production';
 
-describe('Webpack Server Config Object', () => {
+describe('Webpack Prod Config Object', () => {
     before(() => {
         const replacement = env => ([env]);
-        const utils = {
-            env: () => ('development'),
-            resolve: str => (str)
-        };
+
         prodConfig.__Rewire__('plugins', replacement);
         prodConfig.__Rewire__('loaders', replacement);
-        prodConfig.__Rewire__('utils', utils);
+        prodConfig.__Rewire__('path', {
+            resolve: (x, y) => (y),
+        });
     });
 
     it('should export a valid object', () => {
@@ -28,18 +27,18 @@ describe('Webpack Server Config Object', () => {
         expect(configObject.devtool).to.equal('source-map');
 
         expect(configObject).to.have.property('entry');
-        expect(configObject.entry).to.equal('./src/server');
+        expect(configObject.entry).to.equal('./src/index');
 
         expect(configObject).to.have.property('stats');
         expect(configObject.stats).to.equal('minimal');
 
         expect(configObject).to.have.property('target');
-        expect(configObject.target).to.equal('node');
+        expect(configObject.target).to.equal('web');
 
         expect(configObject).to.have.property('output');
         expect(configObject.output).to.have.property('path');
         expect(configObject.output).to.have.property('publicPath');
-        expect(configObject.output).to.have.property('filename', 'index.js');
+        expect(configObject.output).to.have.property('filename', '[name]-[hash].js');
 
         expect(configObject).to.have.property('module');
         expect(configObject.module).to.have.property('rules').which.is.an('array');
@@ -50,6 +49,6 @@ describe('Webpack Server Config Object', () => {
     after(() => {
         prodConfig.__ResetDependency__('plugins');
         prodConfig.__ResetDependency__('loaders');
-        prodConfig.__ResetDependency__('utils');
+        prodConfig.__ResetDependency__('path');
     });
 });
