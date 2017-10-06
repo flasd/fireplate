@@ -1,1 +1,0 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:!0}),exports.HomeView=void 0;var _async=require('../services/async'),_async2=babelHelpers.interopRequireDefault(_async),_loading=require('./loading'),_loading2=babelHelpers.interopRequireDefault(_loading),options={loading:_loading2.default},HomeView=exports.HomeView=(0,_async2.default)('./home',options);

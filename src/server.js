@@ -3,7 +3,6 @@ import ReactHelmet from 'react-helmet';
 import cheerio from 'cheerio';
 import express from 'express';
 import fs from 'fs';
-import functions from 'firebase-functions';
 import helmet from 'helmet';
 import session from 'express-session';
 import { renderToString } from 'react-dom/server';
@@ -46,4 +45,4 @@ app.get('*', (request, response) => {
     return response.status(200).send(render(reactHelmet, html));
 });
 
-exports.app = functions.onRequest(app);
+exports.app = app;

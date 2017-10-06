@@ -1,1 +1,0 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:!0}),exports.default=parseHtml;var _htmltojsx=require('htmltojsx'),_htmltojsx2=babelHelpers.interopRequireDefault(_htmltojsx);function parseHtml(a,b){var c=new _htmltojsx2.default({createClass:!0,outputClassName:b});return c.convert(a)}

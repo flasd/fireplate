@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=HomeView;var _ref=babelHelpers.jsx("div",{},void 0,"HomeView");function HomeView(){return _ref}
