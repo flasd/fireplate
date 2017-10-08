@@ -12,6 +12,13 @@
         "rewrites": [{
             "source": "**",
             "function": "app"
+        }],
+        "headers": [{
+            "source": "**/*.@(js|css|jpg|jpeg|gif|png)",
+            "headers": [{
+                "key": "Cache-Control",
+                "value": "public, max-age=31536000, s-maxage=31536000"
+            }]
         }]
     }
 }

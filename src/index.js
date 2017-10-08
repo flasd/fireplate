@@ -1,5 +1,4 @@
 import './services/analytics';
-import './services/firebase';
 
 import * as offlineRuntime from 'offline-plugin/runtime';
 offlineRuntime.install();

@@ -11,7 +11,7 @@ function resolve(filepath) {
 module.exports = function devConf() {
     return ({
         context: resolve('.'),
-        devtool: 'source-map',
+        devtool: 'eval',
         entry: './src/index',
         target: 'web',
 

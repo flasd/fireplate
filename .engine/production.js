@@ -19,7 +19,7 @@ module.exports = function prodConf() {
         output: {
             path: resolve('dist/assets'),
             publicPath: './assets/',
-            filename: '[name]-[hash].js',
+            filename: '[name].[hash].js',
         },
 
         module: {

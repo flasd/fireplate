@@ -24,7 +24,7 @@ describe('Webpack Dev Config Object', () => {
         expect(configObject.context).to.be.a('string');
 
         expect(configObject).to.have.property('devtool');
-        expect(configObject.devtool).to.equal('source-map');
+        expect(configObject.devtool).to.equal('eval');
 
         expect(configObject).to.have.property('entry');
         expect(configObject.entry).to.equal('./src/index');

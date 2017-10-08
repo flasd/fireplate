@@ -1,5 +1,5 @@
 module.exports = function fileLoader(env) {
-    const name = env === 'development' ? '[name].[ext]' : '[name]-[hash].[ext]';
+    const name = env === 'development' ? '[name].[ext]' : '[name].[hash].[ext]';
     const emitFile = env !== 'node';
 
     return ({
