@@ -1,8 +1,7 @@
 import Load from '../services/async';
 import LoadingView from './loading';
 
-const options = {
+export const HomeView = Load({
+    loader: () => import('./home'),
     loading: LoadingView,
-};
-
-export const HomeView = Load('./home', options);
+});

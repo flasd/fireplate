@@ -3,14 +3,16 @@ import expressHelmet from 'helmet';
 import React from 'react';
 import ReactHelmet from 'react-helmet';
 import session from 'express-session';
+import { Provider } from 'react-redux';
 import { readFileSync } from 'fs';
 import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router';
 
 import App from './app';
 import { getStore } from './services/state';
 
 // ////////////////////////////////////////
-// 
+//
 
 const template = readFileSync('./public/index.html');
 
@@ -29,7 +31,7 @@ function renderComponent(appStore, requestUrl) {
             <StaticRouter location={requestUrl} context={context}>
                 <App />
             </StaticRouter>
-        </Provider>
+        </Provider>,
     );
 
     return {
@@ -63,25 +65,27 @@ function renderHtml(rawTemplate, helmetData, appComponent, appState) {
  * @return     {Response}  the response yo
  */
 function requestHandler(request, response) {
-    getStore().then(store => {
-        const app = renderComponent(store, request.url);
+    getStore()
+        .then((store) => {
+            const app = renderComponent(store, request.url);
 
-        if (app.data) {
-            const helmetData = ReactHelmet.renderStatic();
-            const appState = store.getState();
+            if (app.data) {
+                const helmetData = ReactHelmet.renderStatic();
+                const appState = store.getState();
 
-            const html = renderHtml(template, helmetData, app, appState);
+                const html = renderHtml(template, helmetData, app, appState);
 
-            response.set('Cache-Control', 'public, max-age=300, s-maxage=600');
-            return response.status(200).send(html);
-        }
+                response.set('Cache-Control', 'public, max-age=300, s-maxage=600');
+                return response.status(200).send(html);
+            }
 
-        return response.redirect(302, app.url);
-    });
+            return response.redirect(302, app.url);
+        });
 }
 
+
 // ////////////////////////////////////////
-// 
+//
 
 const app = express();
 const cookieSecrets = ['jJ6#@3A5xL', '9cMb*l2U1P', 'a2n$oJ15X6'];
@@ -91,4 +95,4 @@ app.use(expressHelmet());
 app.use(session(cookieConfig));
 app.get('**', requestHandler);
 
-exports.app = app;
+export default app;

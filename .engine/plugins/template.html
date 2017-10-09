@@ -10,7 +10,9 @@
 <body>
     <div id="root"><!-- ::APP:: --></div>
     <script type="text/javascript">
-        window.__PRELOADED_STATE__ = JSON.parse(/* ::STATE:: */);
+        try {
+            window.__PRELOADED_STATE__ = JSON.parse(/* ::STATE:: */);    
+        } catch (x) {}
     </script>
 </body>
 </html>
