@@ -1,10 +1,10 @@
-const utils = require('./.engine/utils');
+const __PRODUCTION__ = process.env.NODE_ENV === 'production';
 
-if (utils.env === 'production') {
+if (__PRODUCTION__) {
     module.exports = {
         parser: 'postcss-safe-parser',
         plugins: [
-            utils.adapt(null, require('postcss-cssnext')(), null)
+            require('postcss-cssnext')(),
         ]
     };
 } else {

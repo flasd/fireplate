@@ -1,7 +1,5 @@
-import Load from '../services/async';
-import LoadingView from './loading';
+import { asyncComponent } from 'react-async-component';
 
-export const HomeView = Load({
-    loader: () => import('./home'),
-    loading: LoadingView,
+export const HomeView = asyncComponent({
+    resolve: () => import('./home'),
 });

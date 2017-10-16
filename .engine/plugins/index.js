@@ -26,7 +26,7 @@ module.exports = function plugins(env) {
         /* this gets replaced during ssr */
         minify: { collapseWhitespace: true },
         template: './.engine/plugins/template.html',
-        filename: env === 'production' ? '../index.html' : 'index.html'
+        filename: env === 'production' ? '../functions/app/index.html' : 'index.html'
     };
 
     if (env === 'development') {
@@ -38,11 +38,13 @@ module.exports = function plugins(env) {
     } else if (env === 'production') {
         return [
             new ExtractTextPlugin('stylesheets/[name]-[hash].css'),
-            new OfflinePlugin(),
+            new OfflinePlugin({
+                publicPath: './',
+            }),
             new HtmlWebpackPlugin(htmlConfig),
             new webpack.optimize.CommonsChunkPlugin(vendorChunk),
             new webpack.optimize.CommonsChunkPlugin(manifestChunk),
-            new BundleAnalyzerPlugin(),
+            // new BundleAnalyzerPlugin(),
             new webpack.DefinePlugin({
                 'process.env': {
                     'NODE_ENV': JSON.stringify('production')

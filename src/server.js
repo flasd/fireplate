@@ -1,98 +1,66 @@
-import express from 'express';
-import expressHelmet from 'helmet';
 import React from 'react';
 import ReactHelmet from 'react-helmet';
-import session from 'express-session';
+import asyncBootstrapper from 'react-async-bootstrapper';
+import serialize from 'serialize-javascript';
 import { Provider } from 'react-redux';
+import { StaticRouter } from 'react-router';
+import { AsyncComponentProvider, createAsyncContext } from 'react-async-component';
 import { readFileSync } from 'fs';
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router';
+import { resolve } from 'path';
 
 import App from './app';
-import { getStore } from './services/state';
+import getStore from './services/state';
 
-// ////////////////////////////////////////
-//
+const templatePath = resolve(__dirname, './index.html');
+const template = readFileSync(templatePath, 'utf8');
 
-const template = readFileSync('./public/index.html');
-
-/**
- * Render's the root component for the app.
- *
- * @param      {Object}  store   The redux store,
- * @param      {string}  url     The request url,
- * @return     {Object}  Containing the rendered app or the redirec url.
- */
-function renderComponent(appStore, requestUrl) {
-    const context = {};
-
-    const app = renderToString(
-        <Provider store={appStore}>
-            <StaticRouter location={requestUrl} context={context}>
-                <App />
-            </StaticRouter>
-        </Provider>,
-    );
-
-    return {
-        data: context.url ? null : app,
-        url: context.url,
-    };
-}
 
 /**
- * Renders the app full html page.
+ * Renders the app and ships it to the user
  *
- * @param      {string}  rawTemplate   The raw template,
- * @param      {Object}  helmetData    The helmet metadata,
- * @param      {string}  appComponent  The application root component,
- * @param      {Object}  appState      The application state,
- * @return     {string}  Rendered html page.
+ * @param      {express.Request}  request   The request,
+ * @param      {express.Response}  response  The response,
  */
-function renderHtml(rawTemplate, helmetData, appComponent, appState) {
-    return rawTemplate
-        .replace('<title></title>', helmetData.title.toString())
-        .replace('<!-- ::META:: -->', helmetData.meta.toString())
-        .replace('<!-- ::APP:: -->', appComponent)
-        .replace('/* ::STATE:: */', JSON.stringify(appState));
-}
-
-/**
- * Handle requests
- *
- * @param      {Request}   request   The request,
- * @param      {Response}  response  The response,
- * @return     {Response}  the response yo
- */
-function requestHandler(request, response) {
+export default function renderingMiddleware(request, response) {
     getStore()
         .then((store) => {
-            const app = renderComponent(store, request.url);
+            const asyncContext = createAsyncContext();
+            const routerContext = {};
 
-            if (app.data) {
-                const helmetData = ReactHelmet.renderStatic();
-                const appState = store.getState();
+            const app = (
+                <AsyncComponentProvider asyncContext={asyncContext}>
+                    <Provider store={store}>
+                        <StaticRouter location={request.url} context={routerContext}>
+                            <App />
+                        </StaticRouter>
+                    </Provider>
+                </AsyncComponentProvider>
+            );
 
-                const html = renderHtml(template, helmetData, app, appState);
-
-                response.set('Cache-Control', 'public, max-age=300, s-maxage=600');
-                return response.status(200).send(html);
+            if (routerContext.url) {
+                return response.redirect(302, routerContext.url);
             }
 
-            return response.redirect(302, app.url);
+            return asyncBootstrapper(app)
+                .then(() => {
+                    const appMarkup = renderToString(app);
+                    const reduxState = store.getState();
+                    const asyncState = asyncContext.getState();
+
+                    const helmetData = ReactHelmet.renderStatic();
+
+                    const html = template
+                        .replace('<title></title>', helmetData.title.toString())
+                        .replace('<!-- ::META:: -->', helmetData.meta.toString())
+                        .replace('<!-- ::APP:: -->', appMarkup)
+                        .replace('/* ::REDUX__STATE:: */', serialize(reduxState))
+                        .replace('/* ::ASYNC__STATE:: */', serialize(asyncState));
+
+                    response.status(200).send(html);
+                });
+        })
+        .catch(() => {
+            response.status(500).send('The server encountered an unexpected condition which prevented it from fulfilling the request.');
         });
 }
-
-
-// ////////////////////////////////////////
-//
-
-const app = express();
-const cookieSecrets = ['jJ6#@3A5xL', '9cMb*l2U1P', 'a2n$oJ15X6'];
-const cookieConfig = { cookie: { secure: true }, secret: cookieSecrets };
-
-app.use(expressHelmet());
-app.use(session(cookieConfig));
-app.get('**', requestHandler);
-
-export default app;

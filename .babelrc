@@ -4,11 +4,7 @@
     ],
     "plugins": [
         "babel-plugin-root-import",
-        "transform-object-rest-spread", 
-        ["import-inspector", {
-            "serverSideRequirePath": true,
-            "webpackRequireWeakId": true,
-        }],
+        "transform-object-rest-spread",
         "syntax-dynamic-import",
     ],
     "env": {
@@ -35,8 +31,7 @@
                 "react-optimize"
             ],
             "plugins": [
-                "babel-plugin-loop-optimizer",
-                "external-helpers",
+                "loop-optimizer",
                 "fast-async",
                 "lodash",
                 "ramda"
@@ -49,15 +44,15 @@
                         "node": true
                     }
                 }],
-                "minify",
+                // "minify",
                 "react-optimize"
             ],
             "plugins": [
-                "babel-plugin-loop-optimizer",
-                "external-helpers",
+                "dynamic-import-node",
+                "loop-optimizer",
                 "fast-async",
                 "lodash",
-                "ramda"
+                "ramda",
             ]
         },
         "test": {

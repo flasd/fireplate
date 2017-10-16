@@ -9,6 +9,7 @@
     "firebase-functions": "^0.6.2",
     "helmet": "^3.8.2",
     "history": "^4.7.2",
+    "morgan": "^1.9.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-helmet": "^5.2.0",

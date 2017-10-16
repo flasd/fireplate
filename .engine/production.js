@@ -17,8 +17,8 @@ module.exports = function prodConf() {
         target: 'web',
 
         output: {
-            path: resolve('dist/assets'),
-            publicPath: './assets/',
+            path: resolve('public'),
+            publicPath: './',
             filename: '[name].[hash].js',
         },
 

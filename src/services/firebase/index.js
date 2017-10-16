@@ -1,19 +1,19 @@
 // @flow
-import firebase from 'firebase';
+const firebase = require('firebase');
 
 const config = {
-    apiKey: 'AIzaSyCQ4-q45KI2DqOmg7W2tNwhSdDGNVuSHtQ',
-    authDomain: 'flasd-19a5a.firebaseapp.com',
-    databaseURL: 'https://flasd-19a5a.firebaseio.com',
-    projectId: 'flasd-19a5a',
-    storageBucket: 'flasd-19a5a.appspot.com',
-    messagingSenderId: '623648578921'
+    apiKey: "AIzaSyCMHNrUf2Jnj_ZRvITQxfDGGhmVjt-_nfs",
+    authDomain: "remember-f485b.firebaseapp.com",
+    databaseURL: "https://remember-f485b.firebaseio.com",
+    projectId: "remember-f485b",
+    storageBucket: "remember-f485b.appspot.com",
+    messagingSenderId: "761384751493"
 };
 
 const app = firebase.initializeApp(config);
 export default app;
-export const auth = app.auth;
-export const database = app.database;
+export const auth = firebase.auth;
+export const database = firebase.database;
 export const deleteApp = app.delete;
-export const messaging = app.messaging;
-export const storage = app.storage;
+export const messaging = firebase.messaging;
+export const storage = firebase.storage;

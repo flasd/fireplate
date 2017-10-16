@@ -37,7 +37,6 @@ describe('Webpack Prod Config Object', () => {
 
         expect(configObject).to.have.property('output');
         expect(configObject.output).to.have.property('path');
-        expect(configObject.output).to.have.property('publicPath');
         expect(configObject.output).to.have.property('filename', '[name].[hash].js');
 
         expect(configObject).to.have.property('module');
