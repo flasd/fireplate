@@ -1,5 +1,6 @@
-// @flow
 const firebase = require('firebase');
+
+console.warn('Remember to update the details on the service/firebase');
 
 const config = {
     apiKey: "AIzaSyCMHNrUf2Jnj_ZRvITQxfDGGhmVjt-_nfs",

@@ -1,14 +1,14 @@
 const ExtractText = require('extract-text-webpack-plugin');
 
 module.exports = function styleLoader(env) {
-    const commomJsToDOM = {
+    const toFile = {
         loader: 'style-loader',
         options: {
-            emitFile: env !== 'node',
+            emitFile: env !== 'production:server',
         }
     };
 
-    const css2CommonJs = {
+    const toCommonJs = {
         loader: 'css-loader',
         options: {
             module: true,
@@ -17,7 +17,7 @@ module.exports = function styleLoader(env) {
         }
     };
 
-    const postcss = {
+    const postProcess = {
         loader: 'postcss-loader'
     };
 
@@ -28,13 +28,13 @@ module.exports = function styleLoader(env) {
     if (env !== 'development') {
         return {
             test: /\.scss$/,
-            use: ExtractText.extract([css2CommonJs, postcss, sass])
+            use: ExtractText.extract([toFile, toCommonJs, postProcess, sass])
         };
     }
 
     return {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: [commomJsToDOM, css2CommonJs, postcss, sass]
+        use: [toCommonJs, postProcess, sass]
     };
 };

@@ -1,6 +1,6 @@
 module.exports = function fileLoader(env) {
     const name = env === 'development' ? '[name].[ext]' : '[name].[hash].[ext]';
-    const emitFile = env !== 'node';
+    const emitFile = env !== 'production:server';
 
     return ({
         test: /\.(png|jpg|jpeg|gif)$/,

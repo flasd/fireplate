@@ -1,5 +1,7 @@
 import { listen } from '../navigation';
 
+console.warn('Remember to update the details on the service/analytics');
+
 /* eslint-disable */
 
 if (process.env.NODE_ENV === 'production') {

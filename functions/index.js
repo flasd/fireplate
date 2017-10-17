@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const session = require('express-session');
 
-const requestHandler = require('./app/server').default;
+const requestHandler = require('./app').default;
 
 // ////////////////////////////////////////
 

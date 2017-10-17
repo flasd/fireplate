@@ -8,12 +8,13 @@ import { AsyncComponentProvider, createAsyncContext } from 'react-async-componen
 import { readFileSync } from 'fs';
 import { renderToString } from 'react-dom/server';
 import { resolve } from 'path';
+import { pipeAsync } from './services/reporter';
 
 import App from './app';
 import getStore from './services/state';
 
 const templatePath = resolve(__dirname, './index.html');
-const template = readFileSync(templatePath, 'utf8');
+const template = readFileSync(templatePath).toString();
 
 
 /**
@@ -23,7 +24,7 @@ const template = readFileSync(templatePath, 'utf8');
  * @param      {express.Response}  response  The response,
  */
 export default function renderingMiddleware(request, response) {
-    getStore()
+    pipeAsync(getStore)
         .then((store) => {
             const asyncContext = createAsyncContext();
             const routerContext = {};

@@ -4,16 +4,12 @@
   "description": "webpack boilerplate for speed up dev process",
   "main": "./.engine/initializer.js",
   "scripts": {
-    "prebuild": "rimraf public",
-    "build": "cross-env NODE_ENV=production webpack",
-    "prebuild:server": "rimraf functions/src",
-    "build:server": "cross-env NODE_ENV=production:server babel src -d functions/app --ignore test.js",
-    "build:all": "npm run clean && npm run build:server && npm run build",
-    "clean": "rimraf public && rimraf functions/app",
+    "prebuild": "npm run clean",
+    "build": "cross-env NODE_ENV=production webpack --progress",
+    "clean": "rimraf ./public functions/app",
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
     "serve": "firebase serve --only=hosting,functions",
-    "test:engine": "cross-env NODE_ENV=test nyc -x .engine/**/*.test.js mocha ./.engine/**/*.test.js --compilers js:babel-core/register",
-    "run:all": "npm run build:all && npm run serve"
+    "test:engine": "cross-env NODE_ENV=test nyc -x .engine/**/*.test.js mocha ./.engine/**/*.test.js --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -95,6 +91,7 @@
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "redux": "^3.7.2",
+    "serialize-error": "^2.1.0",
     "serialize-javascript": "^1.4.0"
   }
 }

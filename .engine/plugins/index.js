@@ -19,6 +19,16 @@ const manifestChunk = {
     minChunks: Infinity
 };
 
+const uglifyConfig = {
+    compress: {
+        warnings: false,
+    },
+};
+
+const offlineConfig = {
+    publicPath: './',
+};
+
 module.exports = function plugins(env) {
 
     const htmlConfig = {
@@ -29,39 +39,33 @@ module.exports = function plugins(env) {
         filename: env === 'production' ? '../functions/app/index.html' : 'index.html'
     };
 
+    const environment = {
+        'process.env': {
+            'NODE_ENV': JSON.stringify(env),
+        }
+    };
+
     if (env === 'development') {
         return [
-            new HtmlWebpackPlugin(htmlConfig),
+            new NpmInstallPlugin(),
             new webpack.HotModuleReplacementPlugin(),
-            new NpmInstallPlugin()
+            new HtmlWebpackPlugin(htmlConfig),
         ];
     } else if (env === 'production') {
         return [
             new ExtractTextPlugin('stylesheets/[name]-[hash].css'),
-            new OfflinePlugin({
-                publicPath: './',
-            }),
-            new HtmlWebpackPlugin(htmlConfig),
-            new webpack.optimize.CommonsChunkPlugin(vendorChunk),
+            new OfflinePlugin(offlineConfig),
+            new webpack.DefinePlugin(environment),
             new webpack.optimize.CommonsChunkPlugin(manifestChunk),
+            new webpack.optimize.CommonsChunkPlugin(vendorChunk),
+            new webpack.optimize.UglifyJsPlugin(uglifyConfig),
+            new HtmlWebpackPlugin(htmlConfig),
             // new BundleAnalyzerPlugin(),
-            new webpack.DefinePlugin({
-                'process.env': {
-                    'NODE_ENV': JSON.stringify('production')
-                }
-            }),
-            new webpack.optimize.UglifyJsPlugin({
-                compress: { warnings: false },
-            })
         ];
     }
 
     return [
-        new HtmlWebpackPlugin(htmlConfig),
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify('production')
-            }
-        })
+        new ExtractTextPlugin('stylesheets/noop.css'),
+        new webpack.DefinePlugin(environment)
     ];
 };
