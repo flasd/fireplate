@@ -24,6 +24,10 @@ const template = readFileSync(templatePath).toString();
  * @param      {express.Response}  response  The response,
  */
 export default function renderingMiddleware(request, response) {
+    if (request.url.indexOf('.') !== -1) {
+        return response.status(404).end();
+    }
+
     pipeAsync(getStore)
         .then((store) => {
             const asyncContext = createAsyncContext();

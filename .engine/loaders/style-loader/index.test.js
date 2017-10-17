@@ -20,7 +20,7 @@ describe('Style Loader Spec', () => {
 
         expect(output).to.be.an('object');
         expect(output).to.have.property('test');
-        expect(output).to.have.property('use').which.is.an('array').with.lengthOf(4);
+        expect(output).to.have.property('use').which.is.an('array').with.lengthOf(5);
 
         expect(output.test.test('.scss')).to.be.true;
         expect(output.test.test('.css')).to.be.false;

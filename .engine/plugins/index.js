@@ -1,12 +1,9 @@
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const NpmInstallPlugin = require('npm-install-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-// Remember to add the code commented to your entry file
-// import * as offlineRuntime from 'offline-plugin/runtime';
-// offlineRuntime.install();
 const OfflinePlugin = require('offline-plugin');
 
 const vendorChunk = {
@@ -45,15 +42,22 @@ module.exports = function plugins(env) {
         }
     };
 
+    const extractConfig = {
+        filename: './assets/[name].[sha256:contenthash:base64:8].css',
+        disable: env === 'development',
+        allChunks: true,
+    };
+
     if (env === 'development') {
         return [
+            new ExtractTextPlugin(extractConfig),
             new NpmInstallPlugin(),
             new webpack.HotModuleReplacementPlugin(),
             new HtmlWebpackPlugin(htmlConfig),
         ];
     } else if (env === 'production') {
         return [
-            new ExtractTextPlugin('stylesheets/[name]-[hash].css'),
+            new ExtractTextPlugin(extractConfig),
             new OfflinePlugin(offlineConfig),
             new webpack.DefinePlugin(environment),
             new webpack.optimize.CommonsChunkPlugin(manifestChunk),
@@ -65,7 +69,7 @@ module.exports = function plugins(env) {
     }
 
     return [
-        new ExtractTextPlugin('stylesheets/noop.css'),
-        new webpack.DefinePlugin(environment)
+        new ExtractTextPlugin(extractConfig),
+        new webpack.DefinePlugin(environment),
     ];
 };

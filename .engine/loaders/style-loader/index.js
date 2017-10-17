@@ -1,40 +1,50 @@
-const ExtractText = require('extract-text-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+
+function resolve(stg) {
+    return path.resolve(process.cwd(), stg);
+}
 
 module.exports = function styleLoader(env) {
-    const toFile = {
-        loader: 'style-loader',
-        options: {
-            emitFile: env !== 'production:server',
-        }
-    };
+    const __PRODUCTION__ = env === 'production';
 
-    const toCommonJs = {
+    const cssConfig = {
         loader: 'css-loader',
         options: {
             module: true,
             localIdentName: '[hash:base64:8]',
-            minimize: env === 'production',
+            minimize: __PRODUCTION__,
+            sourceMap: __PRODUCTION__,
         }
     };
 
-    const postProcess = {
-        loader: 'postcss-loader'
+    const postcssConfig = {
+        loader: 'postcss-loader',
+        options: {
+            parser: 'postcss-safe-parser',
+            plugins: [
+                autoprefixer()
+            ],
+            sourceMap: __PRODUCTION__,
+        }
     };
 
-    const sass = {
-        loader: 'sass-loader'
+    const sassConfig = {
+        loader: 'sass-loader',
+        options: {
+            includePaths: [
+                resolve('./node_modules/bourbon/app/assets/stylesheets/_bourbon.scss')
+            ],
+            sourceMap: __PRODUCTION__,
+        }
     };
-
-    if (env !== 'development') {
-        return {
-            test: /\.scss$/,
-            use: ExtractText.extract([toFile, toCommonJs, postProcess, sass])
-        };
-    }
 
     return {
         test: /\.scss$/,
-        exclude: /node_modules/,
-        use: [toCommonJs, postProcess, sass]
+        use: ExtractTextPlugin.extract({
+            use: [cssConfig, postcssConfig, sassConfig],
+            fallback: 'style-loader',
+        }),
     };
 };

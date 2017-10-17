@@ -28,7 +28,7 @@ describe('File Loader Spec', () => {
     it('should adapt to env changes', () => {
         const devOutput = fileLoader('development');
         const prodOutput = fileLoader('production');
-        const serverOutput = fileLoader('node');
+        const serverOutput = fileLoader('production:server');
         const bogusOutput = fileLoader('bogus');
 
         expect(devOutput).to.be.an('object');
