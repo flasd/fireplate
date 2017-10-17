@@ -1,8 +1,49 @@
-# webpack-boilerplate
-#### In development, yup.
-I'm developing this so that I can quickstart projects. 
-It's tailored for React with server-side rendering. 
-Everything is well organized an intuitive, so it shouldn't be so hard to go and change it so that it fits your needs. 
+## Self Boilerplate @ v0.0.0-**alpha**-0.3
 
-MIT Licence all the way,
-Make something awesome!
+### Welcome
+This is a React SSR ready boilerplate with Code Spliting, CSS Modules and Offline Support **made for firebase-cloud-functions**. You can use it in any NodeJs environment by editing `/functions/index.js` to listen to a port and not exporting the `app` as a cloud-function.
+
+### Quick Start
+The boilerplate is built on top of NPM, so getting ready to develop is incredbly simple. On your terminal/cmd type the following:
+```
+// Clone this repo
+$ git clone https://github.com/flasd/self-boilerplate.git myApp
+    
+// Cd to the folder
+$  cd myApp
+    
+// Init your firebase project 
+// (DO NOT REPLACE ANY FILE IF ASKED)
+$ npm run init
+    
+// Install all dependencies
+$ npm install
+    
+// Start dev server
+$ npm start
+```
+It it should just work. Any changes you make to files inside the `/src` directory will trigger a reload. This setup uses Webpack's Hot Module Replacement plugin for faster developing expirience.
+
+### Testing
+This boilerplate comes with Mocha, Chai, Enzime, NYC and the Babel Rewire plugin to help you better test your code. You can write your tests in full ES6 glory thanks to the babel-register. You can config test plugins in the .babelrc file.
+
+To run unit tests, open your terminal/cmd and run:
+```
+$ npm test
+```
+
+### Deploying
+
+Deploying  your code to firebase is super simple, just open your terminal/cmd and run the following command. 
+```
+$ npm run deploy
+...
+```
+Done. That easy.
+
+
+----------
+
+
+**MIT Licence** all the way (full licence at `LICENCE.md` file),
+Let's make something awesome!

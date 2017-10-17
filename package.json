@@ -1,19 +1,21 @@
 {
   "name": "webpack-boilerplate",
   "version": "0.0.0-alpha-0.3",
-  "description": "webpack boilerplate for speed up dev process",
-  "main": "./.engine/initializer.js",
+  "description": "React SSR ready boilerplate with Code Spliting, CSS Modules and Offline Support.",
+  "main": "./functions/index.js",
   "scripts": {
+    "init": "firebase init && node ./.engine/initializer && npm run clean",
     "prebuild": "npm run clean",
     "build": "cross-env NODE_ENV=production webpack --progress",
     "clean": "rimraf ./public functions/app",
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
     "serve": "firebase serve --only=hosting,functions",
+    "deploy": "npm run build && firebase deploy",
     "test:engine": "cross-env NODE_ENV=test nyc -x .engine/**/*.test.js mocha ./.engine/**/*.test.js --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flasd/webpack-boilerplate.git"
+    "url": "git+https://github.com/flasd/self-boilerplate.git"
   },
   "keywords": [
     "webpack",
@@ -22,9 +24,9 @@
   "author": "Marcel Coelho",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/flasd/webpack-boilerplate/issues"
+    "url": "https://github.com/flasd/self-boilerplate/issues"
   },
-  "homepage": "https://github.com/flasd/webpack-boilerplate#readme",
+  "homepage": "https://github.com/flasd/self-boilerplate#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
