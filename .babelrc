@@ -4,8 +4,8 @@
     ],
     "plugins": [
         "babel-plugin-root-import",
-        "transform-object-rest-spread",
-        "syntax-dynamic-import",
+        "babel-plugin-transform-object-rest-spread",
+        "babel-plugin-syntax-dynamic-import",
     ],
     "env": {
         "development": {
@@ -31,10 +31,10 @@
                 "react-optimize"
             ],
             "plugins": [
-                "loop-optimizer",
+                "babel-plugin-loop-optimizer",
                 "fast-async",
-                "lodash",
-                "ramda"
+                "babel-plugin-lodash",
+                "babel-plugin-ramda"
             ]
         },
         "production:server": {
@@ -48,11 +48,11 @@
                 "react-optimize"
             ],
             "plugins": [
-                "dynamic-import-node",
-                "loop-optimizer",
+                "babel-plugin-dynamic-import-node",
+                "babel-plugin-loop-optimizer",
                 "fast-async",
-                "lodash",
-                "ramda",
+                "babel-plugin-lodash",
+                "babel-plugin-ramda",
             ]
         },
         "test": {

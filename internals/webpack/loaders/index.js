@@ -1,13 +1,17 @@
 const babelLoader = require('./babel-loader');
-const fileLoader = require('./file-loader');
+const fontsLoader = require('./fonts-loader');
+const imageLoader = require('./image-loader');
+const jsonLoader = require('./json-loader');
 const rawLoader = require('./raw-loader');
 const styleLoader = require('./style-loader');
 
 module.exports = function loaders(env) {
     return ([
         babelLoader(env),
-        fileLoader(env),
+        fontsLoader(env),
+        imageLoader(env),
+        jsonLoader(env),
         rawLoader(env),
-        styleLoader(env)
+        styleLoader(env),
     ]);
 };

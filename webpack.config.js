@@ -1,9 +1,13 @@
-const devConfig = require('./.engine/development');
-const prodConfig = require('./.engine/production');
-const servConfig = require('./.engine/server');
+const devConfig = './internals/webpack/webpack.dev';
+const prodConfig = './internals/webpack/webpack.prod';
+const servConfig = './internals/webpack/webpack.ssr';
+const dllConfig = './internals/webpack/webpack.dll';
 
-if (process.env.NODE_ENV === 'production') {
-    module.exports = [prodConfig(), servConfig()];
+const env = process.env.NODE_ENV;
+const target = process.env.TARGET;
+
+if (env === 'production') {
+    module.exports = target === 'server' ? require(servConfig) : require(prodConfig);
 } else {
-    module.exports = devConfig();
+    module.exports = target === 'dll' ? require(dllConfig) : require(devConfig);
 }

@@ -1,10 +1,6 @@
 const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const path = require('path');
-
-function resolve(stg) {
-    return path.resolve(process.cwd(), stg);
-}
+const { resolve } = require('../../../utils');
 
 module.exports = function styleLoader(env) {
     const __PRODUCTION__ = env === 'production';
