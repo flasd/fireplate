@@ -1,4 +1,4 @@
-## Self Boilerplate @ v0.0.0-**alpha**-0.3
+## FirePlate @ v0.0.0-**alpha**-0.3
 
 ### Welcome
 This is a React SSR ready boilerplate with Code Spliting, CSS Modules and Offline Support **made for firebase-cloud-functions**. You can use it in any NodeJs environment by editing `/functions/index.js` to listen to a port and not exporting the `app` as a cloud-function.
