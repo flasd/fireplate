@@ -1,21 +1,64 @@
-import { createStore } from 'redux';
+/* eslint-disable no-underscore-dangle */ /* eslint-env browser */
+import { createStore, applyMiddleware, compose } from 'redux';
+import { createEpicMiddleware } from 'redux-observable';
 
-// Usefull for pre-hydrating redux store
+import rootEpic from './app.epic';
+import rootReducer from './app.reducer';
+import reporter from './app.report';
+
+// ////////////////////////////////////////
+
+export function initializeProduction(epicMiddleware) {
+    const enhancer = applyMiddleware(
+        epicMiddleware,
+        reporter,
+    );
+
+    if (typeof window !== 'undefined') {
+        const preloadedState = window.__PRELOADED_STATE__ || {};
+        delete window.__PRELOADED_STATE__;
 
 
-export default function initialize() {
-    if (__PRODUCTION__) {
-        return
+        return createStore(rootReducer, preloadedState, enhancer);
     }
 
-    const preloadedState = window.__PRELOADED_STATE__ || {};
-    delete window.__PRELOADED_STATE__;
-
-    const enhancer = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
-    return store = createStore(state => state, preloadedState, enhancer);
+    return createStore(rootReducer, {}, enhancer);
 }
 
+export function initializeDevelopment(epicMiddleware) {
+    const isBrowserEnv = typeof window !== 'undefined';
+    const hasExtension = typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function';
 
-export default function getStore() {
-    return Promise.resolve(createStore(state => (state), {}));
+    const composeEnhancers = isBrowserEnv && hasExtension ?
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
+
+    const enhancer = composeEnhancers(
+        applyMiddleware(
+            epicMiddleware,
+        ),
+    );
+
+    const store = createStore(rootReducer, {}, enhancer);
+
+    if (module.hot) {
+        module.hot.accept('./app.reducer', () => {
+            // eslint-disable-next-line global-require
+            store.replaceReducer(require('./app.reducer').default);
+        });
+    }
+
+    return store;
 }
+
+// ////////////////////////////////////////
+
+export default (() => {
+    const __DEV__ = process.env.NODE_ENV === 'development';
+    const epicMiddleware = createEpicMiddleware(rootEpic);
+
+    if (__DEV__) {
+        return initializeDevelopment(epicMiddleware);
+    }
+
+    return initializeProduction(epicMiddleware);
+})();

@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
         m.parentNode.insertBefore(a, m)
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-77709069-2', 'auto');
+    ga('create', '### YOUR ID ###', 'auto');
     ga('send', 'pageview');
 
     listen(location => ga('send', 'pageview', location.pathname));
