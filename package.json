@@ -1,5 +1,5 @@
 {
-    "name": "self-boilerplate",
+    "name": "fireplate",
     "version": "0.0.0-alpha-0.3",
     "description": "React SSR ready boilerplate with Code Spliting, CSS Modules and Offline Support.",
     "main": "./functions/index.js",
