@@ -1,13 +1,12 @@
-## FirePlate @ v0.0.0-**alpha**-0.3
-
-### Welcome
-This is a React SSR ready boilerplate with Code Spliting, CSS Modules and Offline Support **made for firebase-cloud-functions**. You can use it in any NodeJs environment by editing `/functions/index.js` to listen to a port and not exporting the `app` as a cloud-function.
+# FirePlate @ v0.0.0-**alpha**-0.3
+### Help needed testing.
+This is a React SSR ready boilerplate with Code Spliting, CSS Modules and Offline Support **made for firebase-cloud-functions**.
 
 ### Quick Start
 The boilerplate is built on top of NPM, so getting ready to develop is incredbly simple. On your terminal/cmd type the following:
 ```
 // Clone this repo
-$ git clone https://github.com/flasd/self-boilerplate.git myApp
+$ git clone https://github.com/flasd/fireplate.git myApp
     
 // Cd to the folder
 $  cd myApp
