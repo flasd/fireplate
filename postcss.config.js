@@ -1,14 +1,24 @@
-const __PRODUCTION__ = process.env.NODE_ENV === 'production';
+const autoprefixer = require('autoprefixer');
+const cssNano = require('cssnano');
+const cssNext = require('postcss-cssnext');
+const oldCss = require('oldie');
 
-if (__PRODUCTION__) {
+const autoprefixerConfig = {
+    browsers: '> 1%, last 2 versions, ie 8',
+};
+
+if (process.env.NODE_ENV === 'production') {
     module.exports = {
         parser: 'postcss-safe-parser',
         plugins: [
-            require('postcss-cssnext')(),
-        ]
+            autoprefixer(autoprefixerConfig),
+            cssNext(),
+            oldCss(),
+            cssNano(),
+        ],
     };
 } else {
     module.exports = {
-        parser: 'postcss-safe-parser'
+        parser: 'postcss-safe-parser',
     };
 }
