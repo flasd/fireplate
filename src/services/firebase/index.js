@@ -1,20 +1,35 @@
-const firebase = require('firebase');
+import firebase from 'firebase';
+import 'firebase/firestore';
 
-console.warn('Remember to update the details on the service/firebase');
+if (process.env.NODE_ENV === 'development') {
+    console.warn('Remember to update your firebase info on src/services/firebase');
+}
 
 const config = {
-    apiKey: "AIzaSyCMHNrUf2Jnj_ZRvITQxfDGGhmVjt-_nfs",
-    authDomain: "remember-f485b.firebaseapp.com",
-    databaseURL: "https://remember-f485b.firebaseio.com",
-    projectId: "remember-f485b",
-    storageBucket: "remember-f485b.appspot.com",
-    messagingSenderId: "761384751493"
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: ""
 };
 
 const app = firebase.initializeApp(config);
+
 export default app;
-export const auth = firebase.auth;
-export const database = firebase.database;
 export const deleteApp = app.delete;
-export const messaging = firebase.messaging;
-export const storage = firebase.storage;
+
+export const { EmailAuthProvider } = app.auth;
+export const { GoogleAuthProvider } = app.auth;
+export const { FacebookAuthProvider } = app.auth;
+export const { TwitterAuthProvider } = app.auth;
+export const { GithubAuthProvider } = app.auth;
+
+export const auth = app.auth();
+export const database = app.database();
+export const messaging = app.messaging();
+export const storage = app.storage();
+export const firestore = app.firebase();
+
+export const ERRORS_REFERENCE = database.ref('errors');
+export const LOGS_REFERENCE = database.ref('logs');
