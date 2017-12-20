@@ -1,64 +1,56 @@
 {
     "presets": [
-        "env", "react"
+        "react"
     ],
+
     "plugins": [
-        "babel-plugin-root-import",
-        "babel-plugin-transform-object-rest-spread",
-        "babel-plugin-syntax-dynamic-import",
+        "fast-async",
+        "transform-runtime",
+        "syntax-dynamic-import"
     ],
+
     "env": {
-        "development": {
+        "develoment": {
             "presets": [
                 ["env", {
                     "targets": {
-                        "browsers": "Chrome 61"
+                        "browsers": "Chrome 62"
                     }
-                }],
+                }]
             ],
+
             "plugins": [
                 "meaningful-logs"
             ]
         },
+
+        "test": {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "node": "current"
+                    }
+                }]
+            ],
+
+            "plugins": [
+                "rewire"
+            ]
+        },
+
         "production": {
             "presets": [
                 ["env", {
                     "targets": {
-                        "browsers": "> 3%",
+                        "browsers": "> 1%, last 2 versions, ie 8"
                     }
                 }],
-                "minify",
-                "react-optimize"
+                "react-optimize",
+                "minify"
             ],
+
             "plugins": [
-                "babel-plugin-loop-optimizer",
-                "fast-async",
-                "babel-plugin-lodash",
-                "babel-plugin-ramda"
-            ]
-        },
-        "production:server": {
-            "presets": [
-                ["env", {
-                    "targets": {
-                        "node": true
-                    }
-                }],
-                // "minify",
-                "react-optimize"
-            ],
-            "plugins": [
-                "babel-plugin-dynamic-import-node",
-                "babel-plugin-loop-optimizer",
-                "fast-async",
-                "babel-plugin-lodash",
-                "babel-plugin-ramda",
-            ]
-        },
-        "test": {
-            "presets": ["env"],
-            "plugins": [
-                "rewire"
+                "groundskeeper-willie"
             ]
         }
     }
