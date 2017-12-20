@@ -1,22 +1,21 @@
 {
-  "name": "functions",
-  "description": "Cloud Functions for Firebase",
+  "name": "fireplate-server",
+  "version": "0.0.1-alpha.1",
+  "description": "Fireplate Clound Function Rendering Engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test nyc -x index.test.js mocha index.test.js --require babel-core/register"
+  },
   "dependencies": {
     "express": "^4.15.5",
     "express-session": "^1.15.6",
-    "firebase": "^4.4.0",
-    "firebase-admin": "~5.2.1",
+    "firebase-admin": "^5.5.1",
     "firebase-functions": "^0.6.2",
     "helmet": "^3.8.2",
     "history": "^4.7.2",
-    "morgan": "^1.9.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-helmet": "^5.2.0",
-    "react-loadable": "^4.0.5",
-    "react-redux": "^5.0.6",
-    "react-router": "^4.2.0",
-    "redux": "^3.7.2"
+    "morgan": "^1.9.0"
   },
+  "author": "Marcel de Oliveira Coelho",
+  "license": "UNLICENCED",
   "private": true
 }
