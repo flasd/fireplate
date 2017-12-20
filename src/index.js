@@ -1,57 +1,35 @@
-/* eslint-disable no-underscore-dangle */ /* eslint-env browser */
+/* eslint-env browser */
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render } from 'react-dom';
 import { Router } from 'react-router';
+import { render } from 'react-dom';
 
 import App from './app';
+import './app.scss';
+
 import history from './services/navigation';
-import store from './services/store';
+import store from './services/state';
 
-const __DEV__ = process.env.NODE_ENV === 'development';
-
-if (!__DEV__) {
-    /* eslint-disable global-require, import/no-extraneous-dependencies */
-
+if (process.env.NODE_ENV === 'production') {
     require('offline-plugin/runtime').install();
     require('./services/analytics');
-
-    /* eslint-enable */
 }
 
-// ////////////////////////////////////////
-
-export default function Root() {
-    return (
+export default function getRoot(CurrentApp) {
+    return () => (
         <Provider store={store}>
-            <Router history={history} >
-                <App />
+            <Router history={history}>
+                <CurrentApp />
             </Router>
         </Provider>
     );
 }
 
-const rootNode = document.getElementById('root');
-
-render(<Root />, rootNode);
-
-// ////////////////////////////////////////
-// If dev & hmr, enable re-rendering
-
-
-if (__DEV__ && module.hot) {
-    module.hot.accept('./app', () => {
-        // eslint-disable-next-line global-require
-        const NextApp = require('./app').default;
-        const NextRoot = (
-            <Provider store={store}>
-                <Router history={history} >
-                    <NextApp />
-                </Router>
-            </Provider>
-        );
-
-        render(<NextRoot />, rootNode);
+if (process.env.NODE_ENV === 'development' && module && module.hot) {
+    module.hot.accept('./app.js', () => {
+        const CurrentApp = require('./app.js').default;
+        render(getRoot(CurrentApp)(), document.getElementById('app'));
     });
 }
-/* eslint-enable */
+
+render(getRoot(App)(), document.getElementById('app'));
