@@ -1,3 +1,4 @@
+import React from 'react';
 import { asyncComponent } from 'react-async-component';
 
 import styles from './index.scss';
