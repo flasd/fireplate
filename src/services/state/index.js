@@ -1,16 +1,17 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle *//* eslint-env browser */
 import promiseMiddleware from 'redux-promise-middleware';
 import reduxCatch from 'redux-catch';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { init as initAuthWatchdog } from 'redux-fire-auth';
 
+import appReducer from './reducer';
 import { auth } from '../firebase';
 import { reportError } from '../reporter';
 
 export default (() => {
     const middlewares = applyMiddleware(
         promiseMiddleware,
-        reduxCatch(reportError)
+        reduxCatch(reportError),
     );
 
     if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
