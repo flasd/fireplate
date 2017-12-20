@@ -40,7 +40,7 @@ const babelLoader = {
 };
 
 const styleLoader = {
-    test: /\.scss$/,
+    test: /\.s?css$/,
     exclude: /(node_modules|bower_components)/,
     use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
@@ -52,7 +52,11 @@ const styleLoader = {
             }, {
                 loader: 'sass-loader',
                 options: {
-                    includePaths: [resolve('src/_variables.scss')],
+                    includePaths: [
+                        resolve('src/styles'),
+                        require('bourbon').includePaths,
+                        resolve('node_modules/normalize-scss/sass'),
+                    ],
                 },
             },
         ],
