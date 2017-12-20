@@ -80,8 +80,10 @@
         "webpack-merge": "^4.1.1"
     },
     "dependencies": {
+        "bourbon": "^4.3.4",
         "firebase": "^4.8.0",
         "history": "^4.7.2",
+        "normalize-scss": "^7.0.0",
         "react": "^16.2.0",
         "react-async-bootstrapper": "^1.1.2",
         "react-async-component": "^1.0.2",
