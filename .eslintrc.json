@@ -4,6 +4,8 @@
         "indent": ["error", 4],
         "react/jsx-filename-extension": ["off"],
         "react/jsx-indent": ["error", 4],
-        "function-paren-newline": ["off"]
+        "function-paren-newline": "off",
+        "global-require": "off",
+        "import/no-extraneous-dependencies": "off"
     }
 }
