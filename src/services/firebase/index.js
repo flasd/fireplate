@@ -29,7 +29,7 @@ export const auth = app.auth();
 export const database = app.database();
 export const messaging = app.messaging();
 export const storage = app.storage();
-export const firestore = app.firebase();
+export const firestore = app.firestore();
 
 export const ERRORS_REFERENCE = database.ref('errors');
 export const LOGS_REFERENCE = database.ref('logs');
