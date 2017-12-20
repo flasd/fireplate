@@ -1,1 +1,0 @@
-/* eslint-env node, mocha */
