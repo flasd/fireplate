@@ -1,4 +1,3 @@
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -79,7 +78,7 @@ const manifestChunker = new webpack.optimize.CommonsChunkPlugin({
 
 const extractTextPlugin = new ExtractTextPlugin({
     filename: './assets/[name].[sha256:contenthash:base64:8].css',
-    allChunks: true
+    allChunks: true,
 });
 
 const htmlPlugin = new HtmlWebpackPlugin({
@@ -138,8 +137,7 @@ module.exports = merge(base, {
         manifestChunker,
         extractTextPlugin,
         htmlPlugin,
-        offlinePlugin, 
+        offlinePlugin,
         new UglifyJsPlugin(),
-        new BundleAnalyzerPlugin(),
     ],
 });
