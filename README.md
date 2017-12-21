@@ -1,5 +1,6 @@
 # FirePlate
 Firebase Cloud Functions + React SSR ready boilerplate with Code Spliting, SCSS Modules and Offline Support!
+**Keep in mind that this project is in beta.**
 
 ### Quick Start
 First, as you may know, just clone this repository:
