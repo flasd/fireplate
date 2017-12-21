@@ -2,16 +2,17 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 
 if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
     console.warn('Remember to update your firebase info on src/services/firebase');
 }
 
 const config = {
-    apiKey: "",
-    authDomain: "",
-    databaseURL: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: ""
+    apiKey: '',
+    authDomain: '',
+    databaseURL: '',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: '',
 };
 
 const app = firebase.initializeApp(config);

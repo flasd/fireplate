@@ -1,11 +1,10 @@
 import serializeError from 'serialize-error';
 import serializeJs from 'serialize-javascript';
 
-import { 
+import {
     ERRORS_REFERENCE,
     LOGS_REFERENCE,
- } from '../firebase';
-
+} from '../firebase';
 
 export function reportError(error, message) {
     ERRORS_REFERENCE.push({
@@ -15,7 +14,7 @@ export function reportError(error, message) {
     });
 }
 
-export function reportInfo(info) {
+export function reportInfo(message) {
     LOGS_REFERENCE.push({
         message: serializeJs(message),
         timestamp: Date.now() || +new Date(),

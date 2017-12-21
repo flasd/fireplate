@@ -14,9 +14,10 @@ export default (() => {
         reduxCatch(reportError),
     );
 
+    const preloadedState = window.REDUX_PRELOADED_STATE || {};
+
     if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
         const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-        const preloadedState = window.REDUX_PRELOADED_STATE || {};
 
         const enhancers = composeEnhancers(
             middlewares,

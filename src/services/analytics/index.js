@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { listen } from '../navigation';
 
 if (process.env.NODE_ENV === 'production') {
