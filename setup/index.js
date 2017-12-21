@@ -1,10 +1,12 @@
+/* eslint-env node *//* eslint-disable no-console */
 const childProcess = require('child_process');
 const fs = require('fs');
 
 const packages = require('./packages.json');
 const firebaseConfig = require('./firebase.json');
 
-const expressApp = fs.readFileSync('./express-app');
+
+const expressApp = fs.readFileSync('./setup/express-app.js', 'utf8');
 
 /**
  *
@@ -40,7 +42,10 @@ function initPkg(path, initialData) {
     fs.unlinkSync(path);
     const newAppPkg = Object.assign({}, pkg, initialData);
     fs.writeFileSync(path, JSON.stringify(newAppPkg, null, 4));
-    childProcess.spawnSync('npm', ['install'], { stdio: 'inherit', detached: true });
+    childProcess.spawnSync('npm', ['install'], {
+        stdio: 'inherit',
+        detached: true
+    });
 }
 
 // Removes old files
@@ -54,27 +59,47 @@ rm('./README.md');
 rm('./LICENSE');
 
 // Create new README
-fs.writeFileSync('./README.md', '# your_app\n Here goes your app description!\n\0', 'utf8');
+fs.writeFileSync('./README.md', '# your_app\n Here goes your app description!\n', 'utf8');
 
 // Init new git repository
-childProcess.spawnSync('git', ['init'], { stdio: 'inherit' });
-process.stdout.write('\n');
+try {
+    childProcess.spawnSync('git', ['init'], {
+        stdio: 'inherit',
+    });
+    process.stdout.write('\n');
+} catch (error) {
+    console.log('Error while initializing GIT repository.', error);
+}
 
 // Init new npm repository
-childProcess.spawnSync('npm', ['init'], { stdio: 'inherit', detached: true });
-process.stdout.write('\n');
+try {
+    childProcess.spawnSync('npm', ['init'], {
+        stdio: 'inherit',
+        detached: true,
+    });
+    process.stdout.write('\n');
+} catch (error) {
+    console.log('Error while initializing NPM repository.', error);
+}
 
-// Init new firebase project
-childProcess.spawnSync('firebase', ['init'], { stdio: 'inherit', detached: true });
-process.stdout.write('\n');
+try {
+    // Init new firebase project
+    childProcess.spawnSync('firebase', ['init'], {
+        stdio: 'inherit',
+        detached: true,
+    });
+    process.stdout.write('\n');
+} catch (error) {
+    process.exit(1);
+}
 
 // Write firebase configuration
-fs.unlinkSync('../firebase.json');
-fs.writeFileSync('../firebase.json', JSON.stringify(firebaseConfig, null, 4));
+fs.unlinkSync('./firebase.json');
+fs.writeFileSync('./firebase.json', JSON.stringify(firebaseConfig, null, 4));
 
 // Write Cloud Functions Express App
-fs.unlinkSync('../functions/index.js');
-fs.writeFileSync('../functions/index.js', expressApp);
+fs.unlinkSync('./functions/index.js');
+fs.writeFileSync('./functions/index.js', expressApp);
 
 // Update scripts
 initPkg('./package.json', packages.app);
@@ -84,5 +109,9 @@ initPkg('./functions/package.json', packages.server);
 rm('./setup');
 
 // Commit the initial repository state
-childProcess.spawnSync('git', ['add', '.'], { stdio: 'inherit' });
-childProcess.spawnSync('git', ['commit', '-m', '"This is where it all begins..."'], { stdio: 'inherit' });
+childProcess.spawnSync('git', ['add', '.'], {
+    stdio: 'inherit',
+});
+childProcess.spawnSync('git', ['commit', '-m', '"This is where it all begins..."'], {
+    stdio: 'inherit',
+});
