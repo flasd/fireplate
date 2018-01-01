@@ -47,6 +47,10 @@ const styleLoader = {
         use: [
             {
                 loader: 'css-loader',
+                options: {
+                    modules: true,
+                    localIdentName: '[hash:base64:8]',
+                },
             }, {
                 loader: 'postcss-loader',
             }, {

@@ -24,6 +24,8 @@ const styleLoader = {
             loader: 'css-loader',
             options: {
                 sourceMap: true,
+                modules: true,
+                localIdentName: '[hash:base64:8]',
             },
         }, {
             loader: 'postcss-loader',
