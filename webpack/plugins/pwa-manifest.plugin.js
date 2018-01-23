@@ -6,13 +6,13 @@ const resolve = partial => path.resolve(process.cwd(), partial);
 module.exports = new WebpackPwaManifest({
     name: 'Fireplate App',
     short_name: 'FPApp',
-    description: 'PWAs are awesome man.',
+    description: 'PWAs are awesome son.',
     background_color: '#ffffff',
     icons: [{
         src: resolve('src/app/assets/icons/ios-icon.png'),
         sizes: [120, 152, 167, 180, 1024],
         destination: 'icons/ios',
-        ios: true
+        ios: true,
     }, {
         src: resolve('src/app/assets/icons/ios-icon.png'),
         size: 1024,
