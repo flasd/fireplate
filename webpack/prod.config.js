@@ -5,8 +5,8 @@ const webpack = require('webpack');
 const base = require('./base.config');
 const hashedModuleIdsPlugin = require('./plugins/hashed-modules-ids.plugin');
 const manifestChunkPlugin = require('./plugins/manifest-chunk.plugin');
+const offlinePlugin = require('./plugins/offline.plugin');
 const pwaManifestPlugin = require('./plugins/pwa-manifest.plugin');
-const swPrecachePlugin = require('./plugins/sw-precache.plugin');
 const uglifyPlugin = require('./plugins/uglify.plugin');
 const vendorChunkPlugin = require('./plugins/vendor-chunk.plugin');
 
@@ -26,8 +26,8 @@ module.exports = merge(base, {
     plugins: [
         hashedModuleIdsPlugin,
         manifestChunkPlugin,
-        // pwaManifestPlugin,
-        swPrecachePlugin,
+        offlinePlugin,
+        pwaManifestPlugin,
         uglifyPlugin,
         vendorChunkPlugin,
     ],
