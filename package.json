@@ -27,6 +27,11 @@
             ".jsx"
         ]
     },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "ie 8"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/flasd/fireplate.git"
