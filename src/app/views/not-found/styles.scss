@@ -1,0 +1,10 @@
+@import '_bourbon';
+@import '_mixins';
+
+.container {
+    position: relative;
+}
+
+.message {
+    @include centerer;
+}
