@@ -1,11 +1,6 @@
-/* eslint-disable */
-const chalk = require('chalk');
 const childProcess = require('child_process');
 const deepMerge = require('deepmerge');
 const fs = require('fs');
-const inquirer = require('inquirer');
-const prettyError = new (require('pretty-error'))();
-const rimraf = require('rimraf');
 
 const helpers = require('./helpers');
 
