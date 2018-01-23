@@ -1,117 +1,124 @@
-/* eslint-env node *//* eslint-disable no-console */
 const childProcess = require('child_process');
+
+// 1 - Install needed dependecies
+(() => {
+    const installResult = childProcess.spawnSync('npm', [
+        'install',
+        '--save-dev',
+        'chalk',
+        'deepmerge',
+        'inquirer',
+        'ora',
+        'pretty-error',
+        'rimraf',
+    ]);
+
+    if (installResult.status !== 0) {
+        console.error(installResult.error);
+        process.exit(1);
+    }
+})();
+
+// 2 Import everything we need
+
+const chalk = require('chalk');
+const deepMerge = require('deepmerge');
+const inquirer = require('inquirer');
+const ora = require('ora');
+const prettyError = new (require('pretty-error'))();
+const rimraf = require('rimraf');
 const fs = require('fs');
-
-const packages = require('./packages.json');
-const firebaseConfig = require('./firebase.json');
-
-
-const expressApp = fs.readFileSync('./setup/express-app.js', 'utf8');
+const path = require('path');
 
 /**
  *
- * @param {string} path the path of the file/directory to be removed.
+ * @param {string} partial Path to resolve from root /
  */
-function rm(path) {
-    if (fs.existsSync(path)) {
-        if (fs.lstatSync(path).isDirectory()) {
-            fs.readdirSync(path).forEach((file) => {
-                const realPath = `${path}/${file}`;
+function resolve(partial) {
+    return path.resolve(process.cwd(), partial);
+}
 
-                if (fs.lstatSync(realPath).isDirectory()) {
-                    rm(realPath);
-                } else {
-                    fs.unlinkSync(realPath);
-                }
-            });
+/**
+ *
+ * @param {string} message Message to show on the screen.
+ * @param {Function} fn Job to execute.
+ */
+function job(message, fn) {
+    const spinner = ora({
+        spinner: 'dots10',
+        text: message,
+    });
 
-            fs.rmdirSync(path);
-        } else {
-            fs.unlinkSync(path);
-        }
+    try {
+        fn();
+        spinner.succeed();
+    } catch (err) {
+        spinner.fail();
+        prettyError.render(err);
+        process.exit();
     }
 }
 
 /**
  *
- * @param {string} path Path to the initialized package.json
- * @param {object} initialData Data to merge to the existing package.json
+ * @param {ChildProcess} opResult
  */
-function initPkg(path, initialData) {
-    const pkg = JSON.parse(fs.readFileSync(path));
-    fs.unlinkSync(path);
-    const newAppPkg = Object.assign({}, pkg, initialData);
-    fs.writeFileSync(path, JSON.stringify(newAppPkg, null, 4));
-    childProcess.spawnSync('npm', ['install'], {
-        stdio: 'inherit',
-        detached: true
-    });
+function assertSuccess(opResult) {
+    if (opResult.status !== 0 && opResult.error) {
+        throw opResult.error;
+    }
 }
 
-// Removes old files
-rm('./.git');
-rm('./package.json');
-rm('./package-lock.json');
-rm('./functions/index.js');
-rm('./functions/package.json');
-rm('./functions/package-lock.json');
-rm('./README.md');
-rm('./LICENSE');
+const oldPkgJson = JSON.parse(fs.readFileSync(resolve('package.json')).toString());
+const firebaseConf = JSON.parse(fs.readFileSync(resolve('firebase.json')).toString());
 
-// Create new README
-fs.writeFileSync('./README.md', '# your_app\n Here goes your app description!\n', 'utf8');
-
-// Init new git repository
-try {
-    childProcess.spawnSync('git', ['init'], {
-        stdio: 'inherit',
-    });
-    process.stdout.write('\n');
-} catch (error) {
-    console.log('Error while initializing GIT repository.', error);
-}
-
-// Init new npm repository
-try {
-    childProcess.spawnSync('npm', ['init'], {
-        stdio: 'inherit',
-        detached: true,
-    });
-    process.stdout.write('\n');
-} catch (error) {
-    console.log('Error while initializing NPM repository.', error);
-}
-
-try {
-    // Init new firebase project
-    childProcess.spawnSync('firebase', ['init'], {
-        stdio: 'inherit',
-        detached: true,
-    });
-    process.stdout.write('\n');
-} catch (error) {
-    process.exit(1);
-}
-
-// Write firebase configuration
-fs.unlinkSync('./firebase.json');
-fs.writeFileSync('./firebase.json', JSON.stringify(firebaseConfig, null, 4));
-
-// Write Cloud Functions Express App
-fs.unlinkSync('./functions/index.js');
-fs.writeFileSync('./functions/index.js', expressApp);
-
-// Update scripts
-initPkg('./package.json', packages.app);
-initPkg('./functions/package.json', packages.server);
-
-// Unlink setup script
-rm('./setup');
-
-// Commit the initial repository state
-childProcess.spawnSync('git', ['add', '.'], {
-    stdio: 'inherit',
+job('Removing old files.', () => {
+    // Removing old files
+    rimraf.sync('../.git');
+    rimraf.sync('../.firebaserc');
+    rimraf.sync('../firebase.json');
+    rimraf.sync('../LICENCE.md');
+    rimraf.sync('../package.json');
+    rimraf.sync('../package-lock.json');
+    rimraf.sync('../README.md');
 });
-childProcess.spawnSync('git', ['commit', '-m', '"This is where it all begins..."'], {
-    stdio: 'inherit',
+
+job('Initializing Firebase Project', () => {
+    const loginResult = childProcess.spawnSync('firebase', ['login', '--reauth'], { stdio: 'inherit' });
+    assertSuccess(loginResult);
+
+    const initResult = childProcess.spawnSync('firebase', ['init'], { stdio: 'inherit' });
+    assertSuccess(initResult);
+
+    fs.writeFileSync(resolve('firebase.json'), JSON.stringify(firebaseConf, null, 4));
 });
+
+job('Initializing new NPM repository', () => {
+    const initResult = childProcess.spawnSync('npm', ['init'], { stdio: 'inherit', detached: true });
+    assertSuccess(initResult);
+
+    const newPkg = JSON.parse(fs.readFileSync(resolve('package.json')).toString());
+    const completePkg = deepMerge(oldPkgJson, newPkg);
+
+    fs.writeFileSync(resolve('package.json'), JSON.stringify(completePkg, null, 4));
+
+    const installResult = childProcess.spawnSync('npm', ['install'], { detached: true });
+    assertSuccess(installResult);
+});
+
+job('Initializing Git', () => {
+    const initResult = childProcess.spawnSync('git', ['init']);
+    assertSuccess(initResult);
+
+    const addResult = childProcess.spawnSync('git', ['add', '.']);
+    assertSuccess(addResult);
+
+    const commitResult = childProcess.spawnSync('git', ['commit', '-m', '"This is where it all started."']);
+    assertSuccess(commitResult);
+});
+
+job('Removing setup files', () => {
+    rimraf.sync('../setup');
+});
+
+ora('Success baby.').succeed();
