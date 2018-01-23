@@ -1,35 +1,48 @@
-/* eslint-env browser */
-import React from 'react';
-import { Provider } from 'react-redux';
-import { Router } from 'react-router';
-import { render } from 'react-dom';
+const admin = require('firebase-admin');
+const bodyParser = require('body-parser');
+const express = require('express');
+const firebaseStore = require('connect-session-firebase');
+const functions = require('firebase-functions');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const session = require('express-session');
 
-import App from './app';
-import './app.scss';
+const requestHandler = require('./app/server');
 
-import history from './services/navigation';
-import store from './services/state';
+// ////////////////////////////////////////
 
-if (process.env.NODE_ENV === 'production') {
-    require('offline-plugin/runtime').install();
-    require('./services/analytics');
-}
+const firebase = admin.initializeApp(functions.config().firebase);
+const FirebaseSessionStore = firebaseStore(session);
 
-export default function getRoot(CurrentApp) {
-    return () => (
-        <Provider store={store}>
-            <Router history={history}>
-                <CurrentApp />
-            </Router>
-        </Provider>
-    );
-}
+// ////////////////////////////////////////
 
-if (process.env.NODE_ENV === 'development' && module && module.hot) {
-    module.hot.accept('./app.js', () => {
-        const CurrentApp = require('./app.js').default;
-        render(getRoot(CurrentApp)(), document.getElementById('app'));
-    });
-}
+const app = express();
 
-render(getRoot(App)(), document.getElementById('app'));
+const cookieSecrets = [
+    'jJ6#@3A5xL',
+    '9cMb*l2U1P',
+    'a2n$oJ15X6',
+];
+
+const sessionConfig = {
+    cookie: { secure: true },
+    resave: false,
+    saveUninitialized: false,
+    secret: cookieSecrets,
+    store: new FirebaseSessionStore({ database: firebase.database() }),
+};
+
+app.use(morgan('tiny'));
+app.use(helmet());
+app.use(session(sessionConfig));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.get('*', requestHandler.loadTemplate, requestHandler.renderApp);
+
+exports.app = functions.https.onRequest((request, response) => {
+    if (!request.path) {
+        request.url = `/${request.url}`;
+    }
+
+    return app(request, response);
+});
