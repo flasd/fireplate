@@ -33,8 +33,7 @@
             ],
 
             "plugins": [
-                "rewire",
-                "istanbul"
+                "dynamic-import-node"
             ]
         },
 
@@ -49,7 +48,8 @@
             ],
 
             "plugins": [
-                "groundskeeper-willie"
+                "groundskeeper-willie",
+                "lodash"
             ]
         }
     }
