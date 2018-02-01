@@ -17,6 +17,8 @@ React SSR app boilerplate made to work with Firebase Cloud Functions with Code S
 - NYC, Mocha & Chai for testing
 
 ### Quick Start
+This needs Nodejs v6.12.3 or latter!
+
 First, as you might expect, just clone this repo:
 ```
 $ git clone https://github.com/flasd/fireplate.git nextBigThing
