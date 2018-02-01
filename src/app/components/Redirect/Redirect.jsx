@@ -27,5 +27,5 @@ CustomRedirect.propTypes = {
 };
 
 CustomRedirect.defaultProps = {
-    status: 301,
+    status: 302,
 };
