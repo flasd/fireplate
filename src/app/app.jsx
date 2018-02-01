@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router';
 
-import './styles/app.scss';
+import './styles/app.critical.scss';
 import './services/analytics';
 import './services/service-worker';
 import Home from './views/home';
