@@ -1,5 +1,6 @@
 const history = require('history');
 
+/* istanbul ignore next */
 const myHistory = process.env.BUILD_TARGET !== 'node' ?
     history.createBrowserHistory() : history.createMemoryHistory();
 
