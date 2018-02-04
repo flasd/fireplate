@@ -1,7 +1,7 @@
 const history = require('history');
 
-const myHistory = process.env.BUILD_TARGET === 'node' ?
-    history.createMemoryHistory() : history.createBrowserHistory();
+const myHistory = process.env.BUILD_TARGET !== 'node' ?
+    history.createBrowserHistory() : history.createMemoryHistory();
 
 export const { listen } = myHistory;
 export const { push } = myHistory;
