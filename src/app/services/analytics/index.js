@@ -5,7 +5,7 @@ import { listen } from '../navigation';
 (() => {
     if (process.env.NODE_ENV === 'production' && process.env.BUILD_TARGET !== 'node') {
         if (process.env.ANALYTICS_ID && process.env.ANALYTICS_ID === 'UA-00000000-0') {
-            return console.warn('Please update your Analytics ID in the "build" script in package.json');
+            throw new ReferenceError('Undefined Google Analytics Tracking Code\nPlease update your code in the build script inside package.json');
         }
 
         ((i, s, o, g, r, a, m) => {
