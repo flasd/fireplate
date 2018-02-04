@@ -1,14 +1,14 @@
+/* eslint-disable */
 import { listen } from '../navigation';
 
-// eslint-disable-next-line consistent-return
+/* istanbul ignore next */
 (() => {
     if (process.env.NODE_ENV === 'production' && process.env.BUILD_TARGET !== 'node') {
-        if (process.env.ANALYTICS_ID === '00000000-0') {
+        if (process.env.ANALYTICS_ID && process.env.ANALYTICS_ID === 'UA-00000000-0') {
             return console.warn('Please update your Analytics ID in the "build" script in package.json');
         }
 
         ((i, s, o, g, r, a, m) => {
-            /* eslint-disable */
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
