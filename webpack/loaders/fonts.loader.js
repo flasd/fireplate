@@ -7,6 +7,6 @@ module.exports = {
             name: process.env.NODE_ENV === 'development' ? '[name].ext' : 'fonts/[name].[hash].[ext]',
             emitFile: process.env.BUILD_TARGET !== 'node',
             limit: 8192,
-        }
-    }
+        },
+    },
 };
