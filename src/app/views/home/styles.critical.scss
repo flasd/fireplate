@@ -2,9 +2,9 @@
 @import '_mixins';
 
 .container {
-    position: relative;
+    @include clearfix;
 }
 
-.message {
+.kindWords {
     @include centerer;
 }

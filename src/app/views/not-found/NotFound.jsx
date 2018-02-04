@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
-import styles from './styles.scss';
+import styles from './styles.critical.scss';
 
 export default function NotFound({ staticContext }) {
     if (staticContext) {
@@ -23,7 +23,10 @@ export default function NotFound({ staticContext }) {
 }
 
 NotFound.propTypes = {
-    staticContext: PropTypes.objectOf(PropTypes.any),
+    staticContext: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.any),
+        PropTypes.bool,
+    ]),
 };
 
 NotFound.defaultProps = {
