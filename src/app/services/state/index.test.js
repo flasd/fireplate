@@ -11,7 +11,7 @@ function setEnv(newProps) {
     };
 }
 
-describe('Redux Service', () => {
+describe('App / Service / Redux', () => {
     it('should decorated the store when running on the browser', (done) => {
         const resetEnv = setEnv({ BUILD_TARGET: 'browser' });
         global.window = {};
