@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import asyncBootstrapper from 'react-async-bootstrapper';
 import cheerio from 'cheerio';

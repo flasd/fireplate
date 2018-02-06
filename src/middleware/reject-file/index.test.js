@@ -1,4 +1,3 @@
-/* eslint-disable */
 import sinon from 'sinon';
 import { expect } from 'chai';
 import { mockReq, mockRes } from 'sinon-express-mock';

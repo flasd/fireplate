@@ -1,0 +1,2 @@
+src/**/*.test.js
+enzyme.setup.js

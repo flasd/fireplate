@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 describe('Server / renderAppMiddleware', () => {
     it('should run without exploding');
     it('should render the app properly');

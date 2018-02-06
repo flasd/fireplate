@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import chai, { expect } from 'chai';
 import proxyquire from 'proxyquire';
 import request from 'supertest';

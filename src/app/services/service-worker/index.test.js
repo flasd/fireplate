@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import proxyquire from 'proxyquire';
 import { expect } from 'chai';
 import { spy } from 'sinon';

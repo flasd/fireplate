@@ -1,4 +1,3 @@
-/* eslint-disable */
 import sinon from 'sinon';
 import proxyquirer from 'proxyquire';
 import { expect } from 'chai';

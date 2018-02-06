@@ -1,5 +1,3 @@
-/* eslint-env node, es6, mocha */
-
 import { expect } from 'chai';
 
 import history from './index';
