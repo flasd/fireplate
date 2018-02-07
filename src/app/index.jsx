@@ -34,6 +34,6 @@ if (process.env.NODE_ENV === 'development' && module && module.hot) {
 
 const EntryApp = getRoot(App)();
 
-asyncBootstrapper(EntryApp).then(() => {
+export const bootstrap = asyncBootstrapper(EntryApp).then(() => {
     render(EntryApp, document.getElementById('app'));
 });
