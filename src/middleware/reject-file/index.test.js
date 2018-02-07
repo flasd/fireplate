@@ -20,14 +20,14 @@ describe('Server / rejectFileRequestMiddleware', () => {
         expect(next.called).to.be.false;
     });
 
-    it('should defer control to next middleware on non-file requests', () => {
+    it('should defer control to next middleware on non-file requests', async () => {
         const request = mockReq({
             url: 'no-dot'
         });
         const response = mockRes();
         const next = sinon.spy();
 
-        rejectFileRequestMiddleware(request, response, next);
+        await rejectFileRequestMiddleware(request, response, next);
 
         expect(response.status.called).to.be.false;
         expect(response.end.called).to.be.false;
