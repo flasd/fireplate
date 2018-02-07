@@ -23,6 +23,7 @@ export default function getRoot(CurrentApp) {
     );
 }
 
+/* istanbul ignore next */
 if (process.env.NODE_ENV === 'development' && module && module.hot) {
     module.hot.accept('./app.jsx', () => {
         // eslint-disable-next-line global-require
