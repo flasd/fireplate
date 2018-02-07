@@ -13,7 +13,7 @@ import store from './services/state';
 
 export default function getRoot(CurrentApp) {
     return () => (
-        <AsyncComponentProvider rehydrateState={window.ASYNC_COMPONENTS_STATE || {}}>
+        <AsyncComponentProvider rehydrateState={window.ASYNC_COMPONENTS_STATE || { resolved: {} }}>
             <Provider store={store}>
                 <Router history={history}>
                     <CurrentApp />
