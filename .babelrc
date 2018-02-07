@@ -14,7 +14,10 @@
                 ["env", {
                     "targets": {
                         "browsers": "Chrome 62"
-                    }
+                    },
+                    "exclude": [
+                        "transform-regenerator"
+                    ]
                 }]
             ],
 
@@ -28,7 +31,10 @@
                 ["env", {
                     "targets": {
                         "node": "current"
-                    }
+                    },
+                    "exclude": [
+                        "transform-regenerator"
+                    ]
                 }]
             ],
 
@@ -42,7 +48,10 @@
                 ["env", {
                     "targets": {
                         "browsers": "> 1%, last 2 versions, ie 8"
-                    }
+                    },
+                    "exclude": [
+                        "transform-regenerator"
+                    ]
                 }],
                 "react-optimize"
             ],
