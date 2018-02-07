@@ -5,6 +5,10 @@ const extractTextInstance = require('../plugins/extract-text.plugin');
 const resolve = partial => path.resolve(process.cwd(), partial);
 
 const styleLoader = [{
+    loader: 'style-loader',
+}];
+
+const isomorphicStyleLoader = [{
     loader: 'isomorphic-style-loader',
 }];
 
@@ -47,6 +51,6 @@ module.exports = {
     exclude: /(node_modules|bower_components)/,
     use: onDevelopment ? styleLoader.concat(loaderChain) : extractTextInstance.extract({
         use: loaderChain,
-        fallback: styleLoader,
+        fallback: isomorphicStyleLoader,
     }),
 };
