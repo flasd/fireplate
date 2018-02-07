@@ -48,14 +48,14 @@ app.get('/app-shell.html', serveAppShell);
 app.use(rejectFileRequest);
 app.get('*', loadTemplate, renderApp);
 
+module.exports.app = functions.https.onRequest((request, response) => {
+    if (!request.path) {
+        request.url = `/${request.url}`;
+    }
+
+    return app(request, response);
+});
+
 if (process.env.NODE_ENV === 'test') {
     module.exports = app;
-} else {
-    module.exports.app = functions.https.onRequest((request, response) => {
-        if (!request.path) {
-            request.url = `/${request.url}`;
-        }
-
-        return app(request, response);
-    });
 }
