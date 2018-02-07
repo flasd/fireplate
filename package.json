@@ -15,7 +15,9 @@
         "start": "cross-env NODE_ENV=development webpack-dev-server --hot --progress",
         "poststart": "npm run clear",
         "test": "cross-env NODE_ENV=test BUILD_TARGET=node nyc mocha './src/**/*.test.js' --require ./enzyme.js --require babel-core/register --require ignore-styles",
-        "setup": "npm install --save-dev deepmerge ora pretty-error rimraf && node setup"
+        "presetup": "npm install --save-dev clear-console deepmerge ora pretty-error rimraf",
+        "setup": "node setup",
+        "postsetup": "npm install"
     },
     "nyc": {
         "exclude": [

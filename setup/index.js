@@ -1,179 +1,122 @@
-const childProcess = require('child_process');
+const clear = require('clear-console');
 const deepMerge = require('deepmerge');
-const fs = require('fs');
+const ora = require('ora');
+const { existsSync } = require('fs');
 
 const helpers = require('./helpers');
 
-function checkForBackup() {
-    const spinner = helpers.displaySpinner('Starting setup process.');
+// ////////////////////////////////////////
+// Build Steps
 
-    if (fs.existsSync(helpers.resolve('./setup/backup.json'))) {
-        try {
-            const backup = fs.readFileSync(helpers.resolve('./setup/backup.json')).toJson();
+const pkgPath = helpers.resolve('./package.json');
+const bkpPath = helpers.resolve('./setup/backup.json');
 
-            spinner.succeed();
-            return backup;
-        } catch (readError) {
-            return helpers.terminate(readError, spinner);
-        }
-    }
+const spinner = ora('Initializing setup');
 
-    return false;
-}
-
+/**
+ * @description Creates ./setup/backup.json in case op fails
+ * and package json ends up corrupted.
+ * @returns {object} Original Package.json
+ */
 function doBackup() {
-    const spinner = helpers.displaySpinner('Backing up files in case operation fails.');
+    const pkg = helpers.readFile(pkgPath, 'string', spinner);
+    helpers.writeFile(bkpPath, pkg, spinner);
 
-    try {
-        const pkg = fs.readFileSync(helpers.resolve('./package.json')).toString();
-        const fireConf = fs.readFileSync(helpers.resolve('./firebase.json')).toString();
-    } catch (readError) {
-        return helpers.terminate(readError, spinner);
-    }
-
-    const backup = {
-        package: pkg,
-        firebase: fireConf,
-    };
-
-    try {
-        fs.writeFileSync(helpers.resolve('/setup/backup.json'), JSON.stringify(backup));
-    } catch (writeError) {
-        return helpers.terminate(writeError, spinner);
-    }
-
-    spinner.succeed()
-    return backup;
+    return JSON.parse(pkg);
 }
 
-function removeRepositoryFiles() {
-    const spinner = helpers.displaySpinner('Removing .git/');
+/**
+ * @description Checks if ./setup/backup.json exits
+ * @returns {object} Original Package.json
+ */
+function checkForBackup() {
+    const hasBackup = existsSync(bkpPath);
 
+
+    if (hasBackup) {
+        return helpers.readFile(bkpPath, 'json', spinner);
+    }
+
+    return doBackup();
+}
+
+/**
+ * @description Remove unneeded files
+ */
+function removeRepositoryFiles() {
     const files = [
-        '../.git',
-        '../LICENCE.md',
-        '../package-lock.json',
-        '../package.json',
-        '../README.md',
+        './.git',
+        './LICENCE',
+        './package-lock.json',
+        './package.json',
+        './README.md',
     ];
 
-    try {
-        const result = childProcess.spawnSync('rimraf', files);
-        helpers.assertSuccess(result);
-    } catch (removeError) {
-        return helpers.terminate(removeError, spinner);
-    }
-
-    spinner.succeed();
-}
-
-function initializeFirebase() {
-    const spinner = helpers.displaySpinner('Initializing firebase project.');
-
-    try {
-        const loginResult = childProcess.spawnSync('firebase', ['login', '--reauth'], { stdio: 'inherit' });
-        helpers.assertSuccess(loginResult);
-    } catch (firebaseLoginError) {
-        return helpers.terminate(firebaseLoginError, spinner);
-    }
-
-    try {
-        const initResult = childProcess.spawnSync('firebase', ['init'], { stdio: 'inherit' });
-        helpers.assertSuccess(initResult);
-    } catch (firebaseInitError) {
-        return helpers.terminate(firebaseInitError, spinner);
-    }
-
-    spinner.succeed();
+    helpers.spawn('rimraf', files, {}, spinner);
 }
 
 function initializeGit() {
-    const spinner = helpers.displaySpinner('Initializing new Git repository.');
-
-    try {
-        const result = childProcess.spawnSync('git', ['init']);
-        helpers.assertSuccess(result);
-    } catch (gitInitError) {
-        return helpers.terminate(gitInitError, spinner);
-    }
-
-    spinner.succeed();
+    helpers.spawn('git', ['init'], {}, spinner);
 }
 
-function patchFiles(backup) {
-    const spinner = helpers.displaySpinner('Patching configuration files.');
+function initializeNPM() {
+    console.log('\n\n');
 
-    try {
-        fs.writeFileSync(helpers.resolve('./firebase.json'), JSON.stringify(backup.firebase, null, 4));
-    } catch (writeError) {
-        return helpers.terminate(writeError, spinner);
-    }
+    helpers.spawn('npm', ['init'], { detached: true, stdio: 'inherit' }, spinner);
+    const userPkg = helpers.readFile(pkgPath, 'json', spinner);
 
-    try {
-        const userPkg = fs.readFileSync(helpers.resolve('./package.json')).toJSON();
-        const mergedPkg = deepMerge(backup.package, userPkg);
+    clear();
+    return userPkg;
+}
 
-        fs.writeFileSync(helpers.resolve('./package.json'), JSON.stringify(mergedPkg, null, 4));
-    } catch (readOrWriteError) {
-        return helpers.terminate(readOrWriteError, spinner);
-    }
-
-    spinner.succeed();
+function patchFiles(templatePkg, userPkg) {
+    const finalPkg = deepMerge(templatePkg, userPkg);
+    helpers.writeFile(pkgPath, JSON.stringify(finalPkg, null, 4), spinner);
 }
 
 function makeFirstCommit() {
-    const spinner = helpers.displaySpinner('Staging and Commiting initial project state.');
-
-    try {
-        const result = childProcess.spawnSync('git', ['add', '.']);
-        helpers.assertSuccess(result);
-    } catch (spawnError) {
-        return helpers.terminate(spawnError, spinner);
-    }
-
-    try {
-        const result = childProcess.spawnSync('git', ['commit', '-m', '"This is where it all started."']);
-        helpers.assertSuccess(result);
-    } catch (spawnError) {
-        return helpers.terminate(spawnError, spinner);
-    }
-
-    spinner.succeed();
+    helpers.spawn('git', ['add', '.'], {}, spinner);
+    helpers.spawn('git', ['commit', '-m', '"This is where it all started."'], {}, spinner);
 }
 
 function removeSetupFiles() {
-    const spinner = helpers.displaySpinner('Removing setup files.');
+    helpers.spawn('rimraf', ['./setup/'], {}, spinner);
+}
 
-    try {
-        const result = childProcess.spawnSync('rimraf', ['./setup/']);
-        helpers.assertSuccess(result);
-    } catch (rimrafError) {
-        return helpers.terminate(rimrafError, spinner);
-    }
+// //////////////////////////////
 
+(() => {
+    // Clears terminal/cmd window
+    clear();
+
+    console.log('\n\n');
+
+    spinner.start();
+
+    // Create a package.json backup
+    const templatePkg = checkForBackup();
+
+    // Remove .git folder and a few files
+    spinner.text = 'Removing Git Links with oficial repo';
+    removeRepositoryFiles();
+
+    // Initializes git repository
+    spinner.text = 'Itilializing new Git repo';
+    initializeGit();
+
+    // Intializes npm project
+    spinner.text = 'Itilializing new NPM project';
+    const userPkg = initializeNPM();
+
+    // Patch Package.json scripts and dependencies
+    spinner.text = 'Patching package.json scripts';
+    patchFiles(templatePkg, userPkg);
+
+    // Remove the setup folder to prevent re-setuping
+    spinner.text = 'Finishing up';
+    removeSetupFiles();
+
+    // Make the first commit to clear git working tree
+    makeFirstCommit();
     spinner.succeed();
-}
-
-function done() {
-    helpers.displaySpinner('Done!').succeed();
-}
-
-(function () {
-    try {
-        let backup = checkForBackup();
-
-        if (!backup) {
-            backup = doBackup();
-        }
-
-        removeRepositoryFiles();
-        initializeFirebase();
-        initializeGit();
-        patchFiles(backup);
-        makeFirstCommit();
-        removeSetupFiles();
-        done();
-    } catch (uncaughtException) {
-        helpers.terminate(uncaughtException, helpers.displaySpinner('Something when really wrong.'));
-    }
 })();

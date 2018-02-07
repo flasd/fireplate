@@ -1,2 +1,3 @@
 src/**/*.test.js
+setup/**
 enzyme.setup.js
