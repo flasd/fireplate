@@ -4,10 +4,19 @@ import serialize from 'serialize-javascript';
 
 const resolve = partial => path.resolve(process.cwd(), partial);
 
+const templateCache = {
+    resolved: false,
+};
+
 export default async function serveAppShell(request, response) {
     try {
-        const htmlCanvas = await fs.readFile(resolve('./template.html'));
-        const markup = htmlCanvas.toString().replace('<title></title>', 'Fireplate App Shell')
+        if (!templateCache.resolved) {
+            const htmlCanvas = await fs.readFile(resolve('./template.html'));
+            templateCache.contents = htmlCanvas.toString();
+            templateCache.resolved = true;
+        }
+
+        const markup = templateCache.contents.replace('<title></title>', 'Fireplate App Shell')
             .replace('<!-- ::META:: -->', '')
             .replace('<!-- ::APP:: -->', '')
             .replace('/* ::ASYNC_STATE:: */', serialize({ resolved: {} }))
