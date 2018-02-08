@@ -15,6 +15,10 @@ const rejectFileRequest = require('./middleware/reject-file').default;
 
 const app = express();
 
+const firebase = admin.initializeApp(functions.config().firebase);
+const FirebaseSessionStore = firebaseStore(session);
+const storeInstance = new FirebaseSessionStore({ database: firebase.database() });
+
 const cookieSecrets = [
     'jJ6#@3A5xL',
     '9cMb*l2U1P',
@@ -26,36 +30,36 @@ const sessionConfig = {
     resave: false,
     saveUninitialized: false,
     secret: cookieSecrets,
-    store: (() => {
-        if (process.env.NODE_ENV === 'test') {
-            return undefined;
+    store: storeInstance,
+};
+
+function fixNullPathException(server) {
+    return (request, response) => {
+        if (!request.path) {
+            request.url = `/${request.url}`;
         }
 
-        const firebase = admin.initializeApp(functions.config().firebase);
-        const FirebaseSessionStore = firebaseStore(session);
+        return server(request, response);
+    };
+}
 
-        return new FirebaseSessionStore({
-            database: firebase.database(),
-        });
-    })(),
-};
+// ////////////////////////////////////////
 
 app.use(helmet());
 app.use(session(sessionConfig));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get('/app-shell.html', serveAppShell);
 app.use(rejectFileRequest);
 app.get('*', loadTemplate, renderApp);
 
-module.exports.app = functions.https.onRequest((request, response) => {
-    if (!request.path) {
-        request.url = `/${request.url}`;
-    }
+// ////////////////////////////////////////
 
-    return app(request, response);
-});
-
+/* istanbul ignore next */
 if (process.env.NODE_ENV === 'test') {
     module.exports = app;
+    module.exports.fixNullPathException = fixNullPathException;
 }
+
+module.exports.app = functions.https.onRequest(fixNullPathException(app));
