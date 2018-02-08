@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router';
 
-export default function CustomRedirect({ from, to, status }) {
+export default function RedirectWithStatus({ from, to, status }) {
     return (
         <Route
             render={({ staticContext }) => {
@@ -20,12 +20,12 @@ export default function CustomRedirect({ from, to, status }) {
     );
 }
 
-CustomRedirect.propTypes = {
+RedirectWithStatus.propTypes = {
     from: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
     status: PropTypes.number,
 };
 
-CustomRedirect.defaultProps = {
+RedirectWithStatus.defaultProps = {
     status: 302,
 };

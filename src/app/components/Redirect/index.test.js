@@ -11,7 +11,7 @@ describe('App / Components / Redirect', () => {
     });
 
     it('should export the Redirect component', () => {
-        const wrapper = shallow(<Container />);
+        const wrapper = shallow(<Container from="/" to="/" />);
         expect(<Container from="/" to="/" />).to.deep.equal(<Redirect from="/" to="/" />);
     });
 });
