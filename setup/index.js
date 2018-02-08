@@ -55,10 +55,16 @@ function removeRepositoryFiles() {
     helpers.spawn('rimraf', files, {}, spinner);
 }
 
+/**
+ * @description Initializes new git repository
+ */
 function initializeGit() {
     helpers.spawn('git', ['init'], {}, spinner);
 }
 
+/**
+ * @description Initializes new npm repository
+ */
 function initializeNPM() {
     console.log('\n\n');
 
@@ -69,16 +75,25 @@ function initializeNPM() {
     return userPkg;
 }
 
+/**
+ * @description Patch package.json to add scripts and dependencies
+ */
 function patchFiles(templatePkg, userPkg) {
     const finalPkg = deepMerge(templatePkg, userPkg);
     helpers.writeFile(pkgPath, JSON.stringify(finalPkg, null, 4), spinner);
 }
 
+/**
+ * @description Clear git work tree
+ */
 function makeFirstCommit() {
     helpers.spawn('git', ['add', '.'], {}, spinner);
     helpers.spawn('git', ['commit', '-m', '"This is where it all started."'], {}, spinner);
 }
 
+/**
+ * @description Remove setup files
+ */
 function removeSetupFiles() {
     helpers.spawn('rimraf', ['./setup/'], {}, spinner);
 }
@@ -88,7 +103,6 @@ function removeSetupFiles() {
 (() => {
     // Clears terminal/cmd window
     clear();
-
     console.log('\n\n');
 
     spinner.start();

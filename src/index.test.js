@@ -5,12 +5,15 @@ import sinonChai from 'sinon-chai';
 import { mockReq, mockRes } from 'sinon-express-mock';
 import { stub, spy } from 'sinon';
 
+// ////////////////////////////////////////
+
 chai.use(sinonChai);
 
+const strictProxyquire = proxyquire.noCallThru().noPreserveCache();
 const mockMiddleware = (rq, rs, nx) => nx();
 const mockOwnMiddleware = { default: mockMiddleware, };
 
-const strictProxyquire = proxyquire.noCallThru().noPreserveCache();
+// ////////////////////////////////////////
 
 const server = strictProxyquire.load('./index.js', {
     'connect-session-firebase': () => function Constructor() { },
@@ -22,6 +25,8 @@ const server = strictProxyquire.load('./index.js', {
     './middleware/reject-file': mockOwnMiddleware,
     './middleware/app-shell': mockOwnMiddleware,
 });
+
+// ////////////////////////////////////////
 
 describe('Server', () => {
     it('should work without exploding', (done) => {
@@ -68,11 +73,5 @@ describe('Server', () => {
         expect(request.url).to.equal('/hello');
 
         done();
-    })
-
-    it('should export the correct app', () => {
-        // process.env.NODE_ENV = 'production';
-
-        // expect(exported).to.have.property('app').which.is.a('function');
     });
 });

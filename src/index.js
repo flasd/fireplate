@@ -33,6 +33,13 @@ const sessionConfig = {
     store: storeInstance,
 };
 
+/**
+ * @description Since firebase calls Express App with a request object that can have
+ * the req.path = null. Express is not made to handle null path or empty routes, so
+ * we need to manually fix. And since the Express throws an error before running
+ * middlewares, we need to fix it before calling the app.
+ * @param {Express.App} server Express app
+ */
 function fixNullPathException(server) {
     return (request, response) => {
         if (!request.path) {

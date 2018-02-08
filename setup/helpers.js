@@ -69,6 +69,13 @@ exports.writeFile = function writeFile(filePath, fileContent, spinner) {
     }
 };
 
+/**
+ * 
+ * @param {string} program Script name.
+ * @param {Array<strings>} args Arguments.
+ * @param {Object} options Options
+ * @param {Ora.Spinner} spinner Progress indicator
+ */
 exports.spawn = function spawn(program, args, options, spinner) {
     try {
         const result = spawnSync(program, args, options);
