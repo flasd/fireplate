@@ -17,6 +17,6 @@ describe('App / App', () => {
         const container = shallow(<App />);
         expect(container).to.be.ok;
         expect(container.name()).to.equal('main');
-        expect(container.childAt(0).children()).to.have.lengthOf(2);
+        expect(container.childAt(0).children()).to.have.lengthOf(3);
     });
 });
