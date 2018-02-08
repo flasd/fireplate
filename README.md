@@ -3,7 +3,10 @@
 
 React SSR app boilerplate made to work with Firebase Cloud Functions with Code Spliting, SCSS Modules and Offline Support!
 
-[![npm](https://img.shields.io/badge/Licence-MIT-blue.svg)](https://github.com/flasd/fireplate/blob/master/LICENSE) [![code style](https://img.shields.io/badge/Code%20Style-Airbnb-orange.svg)](https://www.npmjs.com/package/eslint-config-airbnb)
+[![Build Status](https://travis-ci.org/flasd/fireplate.svg?branch=master)](https://travis-ci.org/flasd/fireplate)
+[![Coverage Status](https://coveralls.io/repos/github/flasd/fireplate/badge.svg?branch=master)](https://coveralls.io/github/flasd/fireplate?branch=master)
+[![license](https://img.shields.io/badge/Licence-MIT-blue.svg)](https://github.com/flasd/fireplate/blob/master/LICENSE)
+[![code style](https://img.shields.io/badge/Code%20Style-Airbnb-orange.svg)](https://www.npmjs.com/package/eslint-config-airbnb)
 
 ##### **Keep in mind that this project is currently in beta.**
 
