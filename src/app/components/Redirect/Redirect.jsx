@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router';
+import { Route } from 'react-router';
+import { replace } from '../../services/navigation';
 
 export default function RedirectWithStatus({ from, to, status }) {
     return (
         <Route
+            path={from}
             render={({ staticContext }) => {
                 if (staticContext) {
                     /* eslint-disable no-param-reassign */
@@ -12,9 +14,8 @@ export default function RedirectWithStatus({ from, to, status }) {
                     staticContext.url = to;
                 }
 
-                return (
-                    <Redirect from={from} to={to} />
-                );
+                replace(to);
+                return null;
             }}
         />
     );
