@@ -37,7 +37,11 @@ describe('Server / loadTemplateMiddleware', () => {
 
         await loadTemplateMiddleware(request, response, next);
         expect(response.locals.htmlCanvas).to.be.a('string');
-        expect(next.called).to.be.true;
+        expect(next.calledOnce).to.be.true;
+
+        await loadTemplateMiddleware(request, response, next);
+        expect(response.locals.htmlCanvas).to.be.a('string');
+        expect(next.calledTwice).to.be.true;
     });
 
     it('should return a 500 error if trying to read the template fails', async () => {
