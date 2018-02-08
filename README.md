@@ -25,7 +25,7 @@ $ git clone https://github.com/flasd/fireplate.git nextBigThing
 ```
 Now cd to nextBigThing and run
 ```
-$ node setup
+$ npm run setup
 ...
 ```
 This will pretty much do all the setup for you. Now just
