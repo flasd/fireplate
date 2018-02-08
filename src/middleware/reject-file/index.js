@@ -1,3 +1,8 @@
+/**
+ * @param {Express.Request} request
+ * @param {Express.Response} response
+ * @param {Function} next
+ */
 export default async function requestFileRequest(request, response, next) {
     if (request.url.includes('.')) {
         // If there's a '.' inside the url string, it means that the firebase

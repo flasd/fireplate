@@ -29,11 +29,12 @@ describe('Server / appShellMiddleware', () => {
         const response = mockRes();
 
         await middleware(request, response);
+        await middleware(request, response);
 
         expect(response.send).to.have.been.calledWith('<Hello />');
         expect(readFileStub).to.have.been.calledOnce;
         expect(resolveStub).to.have.been.calledOnce;
-        expect(serializeStub).to.have.been.calledTwice;
+        expect(serializeStub).to.have.been.called;
     });
 
     it('should handle erros gracefully', async () => {
