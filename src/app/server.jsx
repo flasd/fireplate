@@ -33,12 +33,13 @@ export default async function renderApp(request, response) {
             </AsyncComponentProvider>
         );
 
+        await asyncBootstrapper(Root);
+        const appMarkup = renderToString(Root);
+
         if (routerContext.url) {
             return response.redirect(routerContext.status, routerContext.url);
         }
 
-        await asyncBootstrapper(Root);
-        const appMarkup = renderToString(Root);
         const reduxState = store.getState();
         const asyncState = asyncContext.getState();
         const helmetState = reactHelmet.renderStatic();
@@ -52,7 +53,7 @@ export default async function renderApp(request, response) {
 
         return response.status(routerContext.status).send(finalMarkup);
     } catch (error) {
-        console.error('Error while rendering the app', error.message);
+        console.error('Error while rendering the app', error);
         return response.status(500).end();
     }
 }
