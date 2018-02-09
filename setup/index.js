@@ -24,11 +24,17 @@ function doBackup() {
     const fireJson = helpers.readFile(fireJsonPath, 'json', spinner);
 
     const backup = {
-        package: pkg,
+        package: {
+            scripts: pkg.scripts,
+            nyc: pkg.nyc,
+            browserslist: pkg.browserslist,
+            devDependencies: pkg.devDependencies,
+            dependencies: pkg.dependencies,
+        },
         firebase: fireJson,
     };
 
-    helpers.writeFile(bkpPath, JSON.stringify(backup), spinner);
+    helpers.writeFile(bkpPath, JSON.stringify(backup, null, 4), spinner);
 
     return backup;
 }
@@ -97,7 +103,7 @@ function initializeFirebase() {
  * @description Patch package.json to add scripts and dependencies
  */
 function patchFiles(backup, userPkg) {
-    const finalPkg = deepMerge(backup.package, userPkg);
+    const finalPkg = deepMerge(userPkg, backup.package);
     helpers.writeFile(pkgPath, JSON.stringify(finalPkg, null, 4), spinner);
     helpers.writeFile(fireJsonPath, JSON.stringify(backup.firebase, null, 4), spinner);
 }
