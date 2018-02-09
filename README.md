@@ -37,7 +37,7 @@ $ npm start
 ```
 And remember, have fun! 
 
-Entry for the SSR app is `src/server.js` and entry for the browser app is `src/index.js`.
+Entry for the SSR app is `src/index.js` and entry for the browser app is `src/app/index.js`.
 
 ### Testing
 This boilerplate comes with Mocha, Chai, Enzime, NYC and the Babel Rewire plugin to help you better test your code. You can write your tests in full ES6 glory! Plus, it uses eslint to lint your code, making sure you keep up with good practices!
