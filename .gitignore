@@ -59,5 +59,6 @@ typings/
 .env
 
 dist/**
-functions/app/**
+functions/**
 webpack/tmp/**
+.firebaserc

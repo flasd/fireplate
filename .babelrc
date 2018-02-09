@@ -5,7 +5,6 @@
 
     "plugins": [
         "fast-async",
-        "transform-runtime",
         "syntax-dynamic-import"
     ],
 
@@ -15,7 +14,10 @@
                 ["env", {
                     "targets": {
                         "browsers": "Chrome 62"
-                    }
+                    },
+                    "exclude": [
+                        "transform-regenerator"
+                    ]
                 }]
             ],
 
@@ -29,12 +31,15 @@
                 ["env", {
                     "targets": {
                         "node": "current"
-                    }
+                    },
+                    "exclude": [
+                        "transform-regenerator"
+                    ]
                 }]
             ],
 
             "plugins": [
-                "rewire"
+                "dynamic-import-node"
             ]
         },
 
@@ -43,14 +48,17 @@
                 ["env", {
                     "targets": {
                         "browsers": "> 1%, last 2 versions, ie 8"
-                    }
+                    },
+                    "exclude": [
+                        "transform-regenerator"
+                    ]
                 }],
-                "react-optimize",
-                "minify"
+                "react-optimize"
             ],
 
             "plugins": [
-                "groundskeeper-willie"
+                "groundskeeper-willie",
+                "lodash"
             ]
         }
     }
