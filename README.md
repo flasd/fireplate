@@ -28,7 +28,7 @@ $ git clone https://github.com/flasd/fireplate.git nextBigThing
 ```
 Now cd to nextBigThing and run
 ```
-$ npm run setup
+$ sudo npm install firebase-tools -g && npm run setup
 ...
 ```
 This will pretty much do all the setup for you. Now just
