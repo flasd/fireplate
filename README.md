@@ -41,14 +41,18 @@ Entry for the SSR app is `src/index.js` and entry for the browser app is `src/ap
 
 ### Caveat
 **DLL build will fail when the any of the dependencies depend on NodeJs's core modules.**
+
 Example: Let's assume you are adding express to your project. Express depends on NodeJs's modules. To make the project build, open `webpack/dll.config.js` and add 'express' to the exclude array.
 
 ### Tips
 **Critical Path (s)Css**
+
 There are two SCSS loaders, the regular one configured to leave the css inside the component's Js module and the critical path one, configured to inline the css into the index.html template used to render the app.
+```
 Examples:
     myStyles.scss           - Regular CSS, will be injected when component loads.
     myStyles.critical.scss  - Critical path CSS, will be inlined inside index.html
+```
 
 ### Testing
 This boilerplate comes with Mocha, Chai, Enzime, NYC and the Babel Rewire plugin to help you better test your code. You can write your tests in full ES6 glory! Plus, it uses eslint to lint your code, making sure you keep up with good practices!
