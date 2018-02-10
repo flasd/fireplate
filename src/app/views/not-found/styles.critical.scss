@@ -1,0 +1,10 @@
+@import '_bourbon';
+@import '_mixins';
+
+.container {
+    @include clearfix;
+}
+
+.message {
+    @include centerer;
+}

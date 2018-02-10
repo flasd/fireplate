@@ -1,117 +1,167 @@
-/* eslint-env node *//* eslint-disable no-console */
-const childProcess = require('child_process');
-const fs = require('fs');
+const clear = require('clear-console');
+const deepMerge = require('deepmerge');
+const ora = require('ora');
+const { existsSync } = require('fs');
 
-const packages = require('./packages.json');
-const firebaseConfig = require('./firebase.json');
+const helpers = require('./helpers');
 
+// ////////////////////////////////////////
+// Build Steps
 
-const expressApp = fs.readFileSync('./setup/express-app.js', 'utf8');
+const pkgPath = helpers.resolve('./package.json');
+const fireJsonPath = helpers.resolve('./firebase.json');
+const bkpPath = helpers.resolve('./setup/backup.json');
+
+const spinner = ora('Initializing setup');
 
 /**
- *
- * @param {string} path the path of the file/directory to be removed.
+ * @description Creates ./setup/backup.json in case op fails
+ * and package json ends up corrupted.
+ * @returns {object} Original Package.json
  */
-function rm(path) {
-    if (fs.existsSync(path)) {
-        if (fs.lstatSync(path).isDirectory()) {
-            fs.readdirSync(path).forEach((file) => {
-                const realPath = `${path}/${file}`;
+function doBackup() {
+    const pkg = helpers.readFile(pkgPath, 'json', spinner);
+    const fireJson = helpers.readFile(fireJsonPath, 'json', spinner);
 
-                if (fs.lstatSync(realPath).isDirectory()) {
-                    rm(realPath);
-                } else {
-                    fs.unlinkSync(realPath);
-                }
-            });
+    const backup = {
+        package: {
+            scripts: pkg.scripts,
+            nyc: pkg.nyc,
+            browserslist: pkg.browserslist,
+            devDependencies: pkg.devDependencies,
+            dependencies: pkg.dependencies,
+        },
+        firebase: fireJson,
+    };
 
-            fs.rmdirSync(path);
-        } else {
-            fs.unlinkSync(path);
-        }
+    helpers.writeFile(bkpPath, JSON.stringify(backup, null, 4), spinner);
+
+    return backup;
+}
+
+/**
+ * @description Checks if ./setup/backup.json exits
+ * @returns {object} Original Package.json
+ */
+function checkForBackup() {
+    const hasBackup = existsSync(bkpPath);
+
+
+    if (hasBackup) {
+        return helpers.readFile(bkpPath, 'json', spinner);
     }
+
+    return doBackup();
 }
 
 /**
- *
- * @param {string} path Path to the initialized package.json
- * @param {object} initialData Data to merge to the existing package.json
+ * @description Remove unneeded files
  */
-function initPkg(path, initialData) {
-    const pkg = JSON.parse(fs.readFileSync(path));
-    fs.unlinkSync(path);
-    const newAppPkg = Object.assign({}, pkg, initialData);
-    fs.writeFileSync(path, JSON.stringify(newAppPkg, null, 4));
-    childProcess.spawnSync('npm', ['install'], {
-        stdio: 'inherit',
-        detached: true
-    });
+function removeRepositoryFiles() {
+    const files = [
+        './.git',
+        './LICENCE',
+        './package-lock.json',
+        './package.json',
+        './README.md',
+    ];
+
+    helpers.spawn('rimraf', files, {}, spinner);
 }
 
-// Removes old files
-rm('./.git');
-rm('./package.json');
-rm('./package-lock.json');
-rm('./functions/index.js');
-rm('./functions/package.json');
-rm('./functions/package-lock.json');
-rm('./README.md');
-rm('./LICENSE');
-
-// Create new README
-fs.writeFileSync('./README.md', '# your_app\n Here goes your app description!\n', 'utf8');
-
-// Init new git repository
-try {
-    childProcess.spawnSync('git', ['init'], {
-        stdio: 'inherit',
-    });
-    process.stdout.write('\n');
-} catch (error) {
-    console.log('Error while initializing GIT repository.', error);
+/**
+ * @description Initializes new git repository
+ */
+function initializeGit() {
+    helpers.spawn('git', ['init'], {}, spinner);
 }
 
-// Init new npm repository
-try {
-    childProcess.spawnSync('npm', ['init'], {
-        stdio: 'inherit',
-        detached: true,
-    });
-    process.stdout.write('\n');
-} catch (error) {
-    console.log('Error while initializing NPM repository.', error);
+/**
+ * @description Initializes new npm repository
+ */
+function initializeNPM() {
+    console.log('\n\n');
+
+    helpers.spawn('npm', ['init'], { detached: true, stdio: 'inherit' }, spinner);
+    const userPkg = helpers.readFile(pkgPath, 'json', spinner);
+
+    clear();
+    return userPkg;
 }
 
-try {
-    // Init new firebase project
-    childProcess.spawnSync('firebase', ['init'], {
-        stdio: 'inherit',
-        detached: true,
-    });
-    process.stdout.write('\n');
-} catch (error) {
-    process.exit(1);
+/**
+ * @description Initializes new firebase project
+ */
+function initializeFirebase() {
+    console.log('\n\n');
+
+    helpers.spawn('firebase', ['init'], { detached: true, stdio: 'inherit' }, spinner);
+    clear();
 }
 
-// Write firebase configuration
-fs.unlinkSync('./firebase.json');
-fs.writeFileSync('./firebase.json', JSON.stringify(firebaseConfig, null, 4));
+/**
+ * @description Patch package.json to add scripts and dependencies
+ */
+function patchFiles(backup, userPkg) {
+    const finalPkg = deepMerge(userPkg, backup.package);
+    helpers.writeFile(pkgPath, JSON.stringify(finalPkg, null, 4), spinner);
+    helpers.writeFile(fireJsonPath, JSON.stringify(backup.firebase, null, 4), spinner);
+}
 
-// Write Cloud Functions Express App
-fs.unlinkSync('./functions/index.js');
-fs.writeFileSync('./functions/index.js', expressApp);
+/**
+ * @description Clear git work tree
+ */
+function makeFirstCommit() {
+    helpers.spawn('git', ['add', '.'], {}, spinner);
+    helpers.spawn('git', ['commit', '-m', '"This is where it all started."'], {}, spinner);
+}
 
-// Update scripts
-initPkg('./package.json', packages.app);
-initPkg('./functions/package.json', packages.server);
+/**
+ * @description Remove setup files
+ */
+function removeSetupFiles() {
+    helpers.spawn('rimraf', ['./setup/'], {}, spinner);
+}
 
-// Unlink setup script
-rm('./setup');
+// //////////////////////////////
 
-// Commit the initial repository state
-childProcess.spawnSync('git', ['add', '.'], {
-    stdio: 'inherit',
-});
-childProcess.spawnSync('git', ['commit', '-m', '"This is where it all begins..."'], {
-    stdio: 'inherit',
-});
+(() => {
+    // Clears terminal/cmd window
+    clear();
+    console.log('\n\n');
+
+    spinner.start();
+
+    // Create a package.json backup
+    const backup = checkForBackup();
+
+    // Remove .git folder and a few files
+    spinner.text = 'Removing Git Links with oficial repo';
+    removeRepositoryFiles();
+
+    // Initializes git repository
+    spinner.text = 'Initializing new Git repo';
+    initializeGit();
+
+    // Intializes npm project
+    spinner.text = 'Initializing new NPM project';
+    const userPkg = initializeNPM();
+
+    // Intializes firebase project
+    spinner.text = 'Initializing new firebase project';
+    initializeFirebase();
+
+    // Patch Package.json scripts and dependencies
+    spinner.text = 'Patching package.json scripts && firebase files';
+    patchFiles(backup, userPkg);
+
+    // Remove the setup folder to prevent re-setuping
+    spinner.text = 'Finishing up';
+    removeSetupFiles();
+
+    // Make the first commit to clear git working tree
+    makeFirstCommit();
+
+    spinner.text = 'Success baby.';
+    spinner.succeed();
+})();
