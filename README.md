@@ -40,7 +40,7 @@ And remember, have fun!
 Entry for the SSR app is `src/index.js` and entry for the browser app is `src/app/index.js`.
 
 ### Caveat
-**DLL build will fail when the any of the dependencies depend on NodeJs's core modules.**
+**DLL build will fail when any of the dependencies depend on NodeJs's core modules.**
 
 Example: Let's assume you are adding express to your project. Express depends on NodeJs's modules. To make the project build, open `webpack/dll.config.js` and add 'express' to the exclude array.
 
