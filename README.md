@@ -8,8 +8,6 @@ React SSR app boilerplate made to work with Firebase Cloud Functions with Code S
 [![license](https://img.shields.io/badge/Licence-MIT-blue.svg)](https://github.com/flasd/fireplate/blob/master/LICENSE)
 [![code style](https://img.shields.io/badge/Code%20Style-Airbnb-orange.svg)](https://www.npmjs.com/package/eslint-config-airbnb)
 
-##### **Keep in mind that this project is currently in beta.**
-
 ### What does this offer, you ask? :fire:
 - ES6, 7, NEXT Support with Babel
 - Webpack Bundling
