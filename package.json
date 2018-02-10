@@ -122,6 +122,7 @@
         "webpack-pwa-manifest": "^3.4.1"
     },
     "dependencies": {
+        "babel-runtime": "^6.26.0",
         "body-parser": "^1.18.2",
         "connect-session-firebase": "^5.7.0",
         "express": "^4.16.2",

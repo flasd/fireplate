@@ -11,6 +11,9 @@ module.exports = {
                     targets: {
                         node: '6',
                     },
+                    exclude: [
+                        'transform-regenerator',
+                    ],
                 }],
                 'react-optimize',
             ],
